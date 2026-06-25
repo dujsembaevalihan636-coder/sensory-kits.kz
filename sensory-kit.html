@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sensory Kit — сенсорная поддержка прямо в классе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --pink:#EC2D8B; --pink-ink:#D81B7C; --pink-wash:#FDE9F3;
+  --blue:#1FA9E6; --blue-ink:#0E86C4; --blue-wash:#E4F4FC;
+  --orange:#F7951E; --orange-ink:#DE7A00; --orange-wash:#FEF0DD;
+  --green:#7DBE3A; --green-ink:#5C9E2A; --green-wash:#EEF7E1;
+  --yellow:#FFCE00; --violet:#8A6CFF;
+  --ink:#1B1726; --muted:#5E586B; --hair:#ECE6EE;
+  --bg:#FFFDF9; --card:#FFFFFF; --pinkbg:#FFF2F6;
+  --r:22px;
+  --shadow:0 18px 40px -22px rgba(27,23,38,.30);
+  --shadow-sm:0 8px 22px -14px rgba(27,23,38,.32);
+  --maxw:1140px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Golos Text",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:"Unbounded",system-ui,sans-serif;line-height:1.05;letter-spacing:-.01em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.section{padding:92px 0}
+.eyebrow{font-weight:700;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:"Golos Text";font-weight:700;border-radius:999px;padding:12px 22px;font-size:.96rem;cursor:pointer;border:0;transition:transform .18s,box-shadow .18s,background .2s;white-space:nowrap}
+.btn:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.btn-primary{background:var(--pink);color:#fff;box-shadow:0 10px 24px -10px var(--pink)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 30px -10px var(--pink)}
+.btn-ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn-ghost:hover{transform:translateY(-2px);background:var(--ink);color:#fff}
+.btn-white{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)}
+.btn-white:hover{transform:translateY(-2px)}
+.btn-lg{padding:16px 30px;font-size:1.06rem}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(160%) blur(12px);background:rgba(255,253,249,.82);border-bottom:1px solid var(--hair)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:20px}
+.brand-mark{display:flex;align-items:center;gap:11px;font-family:"Unbounded";font-weight:700;font-size:1.05rem}
+.brand-mark svg{width:34px;height:34px;flex:none}
+.nav-links{display:flex;gap:22px;margin-left:auto;align-items:center}
+.nav-links a{font-weight:600;font-size:.93rem;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav .btn{padding:10px 18px}
+.burger{display:none;margin-left:auto;background:none;border:0;cursor:pointer;padding:6px}
+.burger span{display:block;width:24px;height:2.5px;background:var(--ink);border-radius:2px;margin:5px 0;transition:.25s}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(110% 90% at 88% -10%,var(--pink-wash) 0%,transparent 55%),radial-gradient(90% 80% at -8% 20%,var(--blue-wash) 0%,transparent 50%),var(--pinkbg)}
+.hero-in{max-width:var(--maxw);margin:0 auto;padding:74px 24px 84px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(3.1rem,8vw,5.6rem);font-weight:800;margin:.18em 0 .28em}
+.hero h1 .dot{color:var(--pink)}
+.hero .lead{font-size:1.2rem;color:#382f44;max-width:30ch;font-weight:500}
+.hero .eyebrow{color:var(--pink-ink);display:inline-flex;align-items:center;gap:9px;background:#fff;padding:8px 15px;border-radius:999px;box-shadow:var(--shadow-sm)}
+.hero-cta{display:flex;gap:14px;margin:30px 0 26px;flex-wrap:wrap}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:#fff;border-radius:14px;padding:11px 15px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;line-height:1.15}
+.chip b{font-family:"Unbounded";font-weight:700;font-size:1.15rem}
+.chip span{font-size:.78rem;color:var(--muted);font-weight:600}
+.c-pink b{color:var(--pink-ink)} .c-blue b{color:var(--blue-ink)} .c-green b{color:var(--green-ink)}
+.art{position:relative;display:flex;align-items:center;justify-content:center;min-height:380px}
+.brain-stage{position:relative;width:min(420px,80vw)}
+.brain{width:100%;height:auto;filter:drop-shadow(0 30px 50px rgba(236,45,139,.22));transform-origin:50% 52%}
+.brain.breathe{animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.022)}}
+.piece{cursor:pointer;transition:transform .4s cubic-bezier(.2,.8,.3,1);transform-origin:center}
+.piece .ico{pointer-events:none}
+.p-eye:hover{transform:translate(-5px,-5px)} .p-taste:hover{transform:translate(5px,-5px)}
+.p-ear:hover{transform:translate(-5px,5px)} .p-nose:hover{transform:translate(5px,5px)}
+.sense-tip{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:var(--ink);color:#fff;font-weight:700;font-size:.92rem;padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;z-index:5;box-shadow:var(--shadow)}
+.sense-tip.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.assemble .piece{animation:asm .8s cubic-bezier(.2,.85,.3,1) both}
+.assemble .p-eye{animation-delay:.05s}.assemble .p-taste{animation-delay:.16s}.assemble .p-ear{animation-delay:.27s}.assemble .p-nose{animation-delay:.38s}
+@keyframes asm{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.toy{position:absolute;animation:float 9s ease-in-out infinite}
+.toy.t1{width:60px;top:2%;right:6%;animation-delay:.2s}.toy.t2{width:46px;bottom:6%;left:-2%;animation-delay:1.4s}.toy.t3{width:52px;bottom:18%;right:-4%;animation-delay:2.6s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(8deg)}}
+.wave{position:absolute;left:0;right:0;bottom:-1px;line-height:0}
+.wave svg{width:100%;height:60px;display:block}
+
+/* section heading */
+.shead{max-width:64ch}
+.shead .eyebrow{color:var(--muted)}
+.shead h2{font-size:clamp(2rem,4.4vw,3rem);font-weight:700;margin:.32em 0 .35em}
+.shead p{color:var(--muted);font-size:1.12rem;max-width:58ch}
+.shead.center{margin:0 auto;text-align:center}
+.shead.center p{margin-left:auto;margin-right:auto}
+
+/* use cases */
+.use-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:18px;margin-top:50px}
+.uc{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:26px 22px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.uc::before{content:"";position:absolute;inset:0 0 auto 0;height:5px}
+.uc:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.uc .tile{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;margin-bottom:16px}
+.uc .tile svg{width:27px;height:27px}
+.uc h3{font-size:1.08rem;font-weight:600;margin-bottom:8px}
+.uc p{color:var(--muted);font-size:.94rem}
+.uc.u1::before,.uc.u1 .tile{background:var(--pink)}
+.uc.u2::before,.uc.u2 .tile{background:var(--blue)}
+.uc.u3::before,.uc.u3 .tile{background:var(--orange)}
+.uc.u4::before,.uc.u4 .tile{background:var(--green)}
+.uc.u5::before,.uc.u5 .tile{background:var(--yellow)}
+.uc.u5 .tile svg{stroke:var(--ink)}
+
+/* detail */
+.detail{margin-top:30px;background:linear-gradient(135deg,var(--pink) 0%,var(--pink-ink) 100%);color:#fff;border-radius:30px;padding:46px clamp(26px,5vw,56px);position:relative;overflow:hidden;box-shadow:0 22px 44px -20px rgba(216,27,124,.45)}
+.detail::after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;right:-80px;top:-110px;background:radial-gradient(circle,#fff 0%,transparent 70%);opacity:.18}
+.detail .eyebrow{color:var(--yellow)}
+.detail h3{font-family:"Unbounded";font-weight:700;font-size:clamp(1.3rem,3vw,1.7rem);margin:.4em 0 1em;max-width:24ch}
+.dlist{display:grid;grid-template-columns:1fr 1fr;gap:18px 36px;position:relative;z-index:2}
+.dlist .di{display:flex;gap:14px}
+.dlist .di .n{font-family:"Unbounded";font-weight:700;color:var(--yellow);flex:none}
+.dlist .di p{color:#ffe3f1;font-size:.98rem}
+.detail .cite{margin-top:26px;font-size:.85rem;color:rgba(255,255,255,.72);position:relative;z-index:2}
+
+/* почему */
+.why{background:var(--pinkbg)}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.feat{background:#fff;border-radius:var(--r);padding:30px 28px;display:flex;gap:20px;align-items:flex-start;box-shadow:var(--shadow-sm);border:1px solid var(--hair);transition:transform .3s}
+.feat:hover{transform:translateY(-4px)}
+.feat .num{font-family:"Unbounded";font-weight:700;font-size:1.5rem;flex:none;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff}
+.feat:nth-child(1) .num{background:var(--pink)} .feat:nth-child(2) .num{background:var(--blue)} .feat:nth-child(3) .num{background:var(--orange)} .feat:nth-child(4) .num{background:var(--green)}
+.feat h3{font-size:1.16rem;font-weight:600;margin-bottom:7px}
+.feat p{color:var(--muted);font-size:.98rem}
+.proof-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px;text-align:center}
+.proof{background:#fff;border:1px solid var(--hair);border-radius:18px;padding:24px 16px;box-shadow:var(--shadow-sm)}
+.proof .big{font-family:"Unbounded";font-weight:800;font-size:clamp(2.3rem,5vw,3.1rem);line-height:1}
+.proof:nth-child(1) .big{color:var(--pink-ink)} .proof:nth-child(2) .big{color:var(--blue-ink)} .proof:nth-child(3) .big{color:var(--green-ink)}
+.proof p{margin-top:8px;color:var(--muted);font-size:.9rem;font-weight:500}
+.uses{text-align:center;margin-top:24px;color:var(--muted);font-size:.95rem}
+.uses b{color:var(--ink)}
+.midcta{text-align:center;margin-top:40px}
+
+/* НАПОЛНЕНИЕ section */
+.nap{background:var(--bg)}
+.boxpanel{margin-top:44px;background:linear-gradient(180deg,var(--pink-wash) 0%,var(--bg) 100%);border:1px solid var(--hair);border-radius:34px;padding:40px 24px 48px}
+.stage{position:relative;display:flex;flex-direction:column;align-items:center}
+.boxwrap{position:relative;width:min(420px,84vw);filter:drop-shadow(0 26px 40px rgba(236,45,139,.20))}
+.boxwrap svg{width:100%;height:auto;display:block;overflow:visible}
+.lid{transform-box:fill-box;transform-origin:50% 50%;transition:transform .7s cubic-bezier(.3,.9,.3,1)}
+.boxwrap.open .lid{transform:translate(-16px,-46px) rotate(-15deg)}
+.mouthglow{opacity:0;transition:opacity .5s}
+.boxwrap.open .mouthglow{opacity:1}
+.spark{position:absolute;left:50%;top:38%;width:24px;height:24px;border-radius:50%;border:3px solid var(--yellow);transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none}
+.spark.go{animation:spark .5s ease-out}
+@keyframes spark{0%{opacity:.9;transform:translate(-50%,-50%) scale(.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.4)}}
+.openbtn{margin-top:26px;text-align:center}
+.openbtn .hint{display:block;color:var(--muted);font-size:.85rem;margin-top:10px}
+.replay{margin-top:22px;background:#fff;color:var(--ink);border:2px solid var(--hair);box-shadow:var(--shadow-sm);display:none}
+.replay.show{display:inline-flex}
+.item-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px}
+.item{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow-sm);text-align:center;opacity:0;position:relative;overflow:hidden;will-change:transform,opacity}
+.item.shown{opacity:1}
+.item::before{content:"";position:absolute;inset:0 0 auto 0;height:5px}
+.item.k-ink::before{background:var(--ink)} .item.k-pink::before{background:var(--pink)}
+.item.k-blue::before{background:var(--blue)} .item.k-violet::before{background:var(--violet)}
+.item.k-orange::before{background:var(--orange)} .item.k-green::before{background:var(--green)}
+.item .pic{width:96px;height:96px;margin:6px auto 14px;background:var(--bg);border-radius:18px;display:grid;place-items:center}
+.item .pic svg{width:70px;height:70px}
+.item h3{font-size:1.05rem;font-weight:600;margin-bottom:7px}
+.item p{color:var(--muted);font-size:.9rem}
+.item .qty{position:absolute;top:12px;right:12px;background:var(--pink-wash);color:var(--pink-ink);font-weight:700;font-size:.72rem;padding:4px 9px;border-radius:999px}
+.real-in{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center;margin-top:54px}
+.real-photo{background:#fff;border-radius:28px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--hair);position:relative}
+.real-photo img{border-radius:16px}
+.real-photo .bdg{position:absolute;left:-14px;bottom:-14px;background:var(--yellow);color:var(--ink);font-family:"Unbounded";font-weight:700;font-size:.9rem;padding:12px 16px;border-radius:16px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;line-height:1.1}
+.real-photo .bdg b{font-size:1.5rem}
+.real-copy .eyebrow{color:var(--pink-ink)}
+.real-copy h3{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:700;margin:.3em 0 .5em}
+.real-copy p{color:var(--muted);margin-bottom:20px}
+.safe{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.safe span{background:var(--green-wash);color:var(--green-ink);font-weight:600;font-size:.86rem;padding:8px 14px;border-radius:999px}
+
+.subhead{margin:54px 0 0;max-width:62ch}
+.subhead .eyebrow{color:var(--blue-ink)}
+.subhead h3{font-family:"Unbounded";font-weight:700;font-size:clamp(1.4rem,3vw,1.9rem);margin-top:.3em}
+.subhead p{color:var(--muted);margin-top:.4em}
+.proof .u{display:block;margin-top:6px;font-size:.76rem;color:#9a93a6;font-weight:600}
+.carter{margin-top:40px;background:linear-gradient(120deg,var(--pink) 0%,var(--violet) 100%);border-radius:34px;padding:46px clamp(26px,5vw,54px);color:#fff;display:grid;grid-template-columns:1.4fr .9fr;gap:34px;align-items:center;position:relative;overflow:hidden}
+.carter::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.16);right:-70px;bottom:-90px}
+.carter .eyebrow{color:#ffeaf6}
+.carter h3{font-family:"Unbounded";font-weight:700;font-size:clamp(1.4rem,3vw,1.9rem);margin:.4em 0 .5em;color:#fff;position:relative;z-index:2}
+.carter p{color:#ffeaf6;position:relative;z-index:2;max-width:54ch}
+.carter-stats{display:flex;flex-direction:column;gap:12px;position:relative;z-index:2}
+.carter-stats div{background:rgba(255,255,255,.16);border-radius:16px;padding:14px 18px}
+.carter-stats b{font-family:"Unbounded";font-weight:700;font-size:1.35rem;display:block;line-height:1.1}
+.carter-stats span{font-size:.82rem;opacity:.92}
+@media(max-width:920px){ .carter{grid-template-columns:1fr} }
+
+/* версия-тизер блока Carter's Kits для главной страницы со ссылкой на отдельную страницу */
+.carter-teaser{margin-top:40px;background:linear-gradient(120deg,var(--pink) 0%,var(--violet) 100%);border-radius:34px;padding:42px clamp(26px,5vw,52px);color:#fff;position:relative;overflow:hidden}
+.carter-teaser::before{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.16);right:-60px;bottom:-70px}
+.carter-teaser .eyebrow{color:#ffeaf6;position:relative;z-index:2}
+.carter-teaser h3{font-family:"Unbounded";font-weight:700;font-size:clamp(1.3rem,3vw,1.8rem);margin:.4em 0 .5em;color:#fff;position:relative;z-index:2;max-width:32ch}
+.carter-teaser p{color:#ffeaf6;position:relative;z-index:2;max-width:58ch;margin-bottom:22px}
+.carter-teaser .btn{position:relative;z-index:2}
+
+/* блок-вступление для страницы "Подробнее" */
+.back-link{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;color:var(--pink-ink);margin-bottom:22px}
+.back-link:hover{text-decoration:underline}
+
+/* применение + modal */
+.seg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:50px}
+.seg{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:30px 26px 26px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+.seg::before{content:"";position:absolute;inset:0 0 auto 0;height:6px}
+.seg:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.seg .tile{width:60px;height:60px;border-radius:18px;display:grid;place-items:center;margin-bottom:20px}
+.seg .tile svg{width:32px;height:32px}
+.seg h3{font-size:1.32rem;font-weight:600;margin-bottom:9px}
+.seg p{color:var(--muted);font-size:1rem;flex:1}
+.seg .more{margin-top:20px;align-self:flex-start;background:transparent;border:2px solid currentColor;border-radius:999px;padding:9px 18px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:"Golos Text";display:inline-flex;align-items:center;gap:7px;transition:.2s}
+.seg .more:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.seg.s-pink::before,.seg.s-pink .tile{background:var(--pink)} .seg.s-pink .more{color:var(--pink-ink)} .seg.s-pink .more:hover{background:var(--pink);color:#fff;border-color:var(--pink)}
+.seg.s-blue::before,.seg.s-blue .tile{background:var(--blue)} .seg.s-blue .more{color:var(--blue-ink)} .seg.s-blue .more:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.seg.s-green::before,.seg.s-green .tile{background:var(--green)} .seg.s-green .more{color:var(--green-ink)} .seg.s-green .more:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
+.modal.open{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(27,23,38,.55);backdrop-filter:blur(4px);animation:fade .25s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal-card{position:relative;background:#fff;border-radius:26px;max-width:540px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 40px 80px -30px rgba(0,0,0,.5);animation:pop .3s cubic-bezier(.2,.85,.3,1)}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal-top{padding:30px 30px 0;display:flex;gap:16px;align-items:center}
+.modal-top .tile{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;flex:none}
+.modal-top .tile svg{width:28px;height:28px}
+.modal-top h3{font-size:1.4rem;font-weight:700}
+.modal-top .sub{font-size:.85rem;color:var(--muted);font-weight:600}
+.modal-body{padding:22px 30px 30px}
+.modal-body ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.modal-body li{display:flex;gap:12px;font-size:1rem;color:#382f44}
+.modal-body li svg{width:20px;height:20px;flex:none;margin-top:3px}
+.modal-body .tagrow{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.modal-body .tagrow span{font-weight:700;font-size:.82rem;padding:6px 13px;border-radius:999px}
+.modal-foot{padding:0 30px 30px}
+.modal-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);cursor:pointer;font-size:1.3rem;line-height:1;color:var(--ink);display:grid;place-items:center;transition:.2s}
+.modal-close:hover{background:var(--hair)}
+.modal-close:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.m-pink .tile{background:var(--pink)} .m-pink .tagrow span{background:var(--pink-wash);color:var(--pink-ink)} .m-pink li svg{stroke:var(--pink)}
+.m-blue .tile{background:var(--blue)} .m-blue .tagrow span{background:var(--blue-wash);color:var(--blue-ink)} .m-blue li svg{stroke:var(--blue)}
+.m-green .tile{background:var(--green)} .m-green .tagrow span{background:var(--green-wash);color:var(--green-ink)} .m-green li svg{stroke:var(--green)}
+
+/* training */
+.train{background:linear-gradient(120deg,var(--orange) 0%,#ffb04d 100%);border-radius:34px;padding:54px clamp(26px,5vw,60px);color:#fff;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center;position:relative;overflow:hidden}
+.train::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.18);right:-60px;bottom:-90px}
+.train .eyebrow{color:#fff;opacity:.92}
+.train h2{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;margin:.3em 0 .2em;color:#fff}
+.train p{color:#fff;opacity:.95;max-width:46ch}
+.train .cta-col{display:flex;flex-direction:column;gap:12px;align-items:flex-start;z-index:2}
+
+/* contacts */
+.cont-head{text-align:center;max-width:60ch;margin:0 auto}
+.cont-head .eyebrow{color:var(--pink-ink)}
+.cont-head h2{font-size:clamp(2rem,4.4vw,2.9rem);font-weight:700;margin:.32em 0 .3em}
+.cont-head p{color:var(--muted);font-size:1.1rem}
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin:50px 0 34px}
+.member{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:28px 24px;text-align:center;box-shadow:var(--shadow-sm);transition:transform .3s}
+.member:hover{transform:translateY(-5px)}
+.member .av{width:62px;height:62px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;font-family:"Unbounded";font-weight:700;font-size:1.4rem;color:#fff}
+.member:nth-child(1) .av{background:var(--pink)} .member:nth-child(2) .av{background:var(--orange)} .member:nth-child(3) .av{background:var(--green)} .member:nth-child(4) .av{background:var(--blue)}
+.member h3{font-size:1.18rem;font-weight:600}
+.member .role{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.member a{display:block;font-weight:600;font-size:.95rem;margin-top:5px}
+.member a:hover{color:var(--pink-ink)}
+.cont-foot{text-align:center;background:var(--pink-wash);border-radius:24px;padding:38px 24px}
+.cont-foot p{color:var(--pink-ink);font-weight:600;margin-bottom:18px}
+.cont-foot .pk{font-weight:700}
+
+/* about */
+.about-intro{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start;margin-top:36px}
+.about-copy p{color:var(--muted);margin-bottom:14px}
+.about-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.about-pills span{background:#fff;border:1px solid var(--hair);border-radius:999px;padding:9px 16px;font-weight:600;font-size:.86rem}
+.about-card{background:linear-gradient(135deg,var(--pink-wash),#fff);border:1px solid var(--hair);border-radius:28px;padding:28px;box-shadow:var(--shadow-sm)}
+.about-card h3{font-size:1.2rem;font-weight:700;margin-bottom:12px}
+.about-card ul{list-style:none;display:grid;gap:10px}
+.about-card li{display:flex;gap:10px;color:var(--muted);font-size:.95rem}
+.about-card li::before{content:"✦";color:var(--pink-ink);font-weight:700}
+.event-block{margin-top:48px;background:var(--card);border:1px solid var(--hair);border-radius:30px;padding:34px clamp(24px,4vw,42px);box-shadow:var(--shadow-sm)}
+.event-top{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:18px}
+.event-date{background:var(--pink);color:#fff;font-family:"Unbounded";font-weight:700;font-size:.95rem;padding:10px 18px;border-radius:999px}
+.event-time{background:var(--blue-wash);color:var(--blue-ink);font-weight:700;font-size:.9rem;padding:10px 16px;border-radius:999px}
+.event-block h3{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;margin-bottom:10px}
+.event-block>p{color:var(--muted);max-width:72ch;margin-bottom:22px}
+.event-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.event-grid div{background:var(--bg);border:1px solid var(--hair);border-radius:18px;padding:16px 18px}
+.event-grid b{display:block;font-size:.95rem;margin-bottom:4px}
+.event-grid span{color:var(--muted);font-size:.88rem}
+.photo-block{margin-top:48px}
+.photo-block h3{font-size:1.35rem;font-weight:700;margin-bottom:8px}
+.photo-block p{color:var(--muted);font-size:.95rem;margin-bottom:18px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.photo-slot{position:relative;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,var(--pink-wash),var(--blue-wash));border:1px solid var(--hair);box-shadow:var(--shadow-sm);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
+.photo-slot::before{content:"📷";font-size:2rem;opacity:.3;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.photo-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-slot .ph-label{position:absolute;left:12px;bottom:12px;background:rgba(27,23,38,.72);color:#fff;font-size:.72rem;font-weight:700;padding:6px 10px;border-radius:999px}
+
+/* reviews */
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px}
+.review{background:var(--card);border:1px solid var(--hair);border-radius:24px;padding:26px 22px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:14px}
+.review .stars{color:var(--yellow);letter-spacing:2px;font-size:1rem}
+.review q{color:var(--ink);font-size:.98rem;line-height:1.55;font-style:normal}
+.review .who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.review .who .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:"Unbounded";font-weight:700;font-size:.85rem;color:#fff;background:var(--blue)}
+.review:nth-child(2) .who .av{background:var(--pink)}
+.review:nth-child(3) .who .av{background:var(--green)}
+.review:nth-child(4) .who .av{background:var(--orange)}
+.review:nth-child(5) .who .av{background:var(--violet)}
+.review:nth-child(6) .who .av{background:var(--blue-ink)}
+.review .who b{display:block;font-size:.92rem}
+.review .who span{color:var(--muted);font-size:.8rem}
+
+/* footer */
+.foot{background:var(--ink);color:#cfc7d8;padding:54px 0 40px;text-align:center}
+.foot .brand-mark{justify-content:center;color:#fff;margin-bottom:16px}
+.foot p{font-size:.92rem;max-width:60ch;margin:0 auto 6px}
+.foot .small{color:#8b8398;font-size:.84rem;margin-top:18px}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:920px){
+  .hero-in,.train,.real-in{grid-template-columns:1fr}
+  .art{order:-1;min-height:300px}
+  .seg-grid,.team,.proof-row,.reviews-grid,.photo-grid,.about-intro,.event-grid{grid-template-columns:1fr}
+  .feat-grid,.dlist{grid-template-columns:1fr}
+  .item-grid{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--bg);padding:18px 24px;gap:16px;border-bottom:1px solid var(--hair);box-shadow:var(--shadow)}
+  .nav-links.open a{color:var(--ink)}
+  .burger{display:block}
+  .section{padding:70px 0}
+  .train .cta-col{align-items:stretch}
+}
+@media(max-width:480px){ .hero-cta .btn{flex:1} .item-grid{grid-template-columns:1fr 1fr;gap:14px} .item .pic{width:80px;height:80px} .item .pic svg{width:58px;height:58px} }
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,.brain.breathe,.toy,.piece{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}.item{opacity:1!important}
+}
+
+/* ======== ORDER FORM ======== */
+.order-form-wrap{background:var(--card);border:1px solid var(--hair);border-radius:28px;padding:40px clamp(22px,4vw,52px);box-shadow:var(--shadow);margin:40px 0 0;transition:background .3s,border-color .3s}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-weight:600;font-size:.92rem;color:var(--ink)}
+.form-group label .req{color:var(--pink)}
+.form-input{border:1.5px solid var(--hair);border-radius:12px;padding:13px 16px;font-size:.96rem;font-family:"Golos Text",sans-serif;color:var(--ink);background:var(--bg);transition:border-color .2s,box-shadow .2s;outline:none;width:100%;box-sizing:border-box}
+.form-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,45,139,.11)}
+.form-input::placeholder{color:var(--muted)}
+select.form-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235E586B' stroke-width='2.2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px;padding-right:42px;cursor:pointer}
+textarea.form-input{resize:vertical;min-height:96px;line-height:1.5}
+.form-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:8px;flex-wrap:wrap}
+.form-note{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.form-note svg{flex:none;width:16px;height:16px;stroke:var(--green);stroke-width:2}
+.form-submit-btn{background:var(--pink);color:#fff;border:none;border-radius:999px;padding:15px 32px;font-family:"Golos Text",sans-serif;font-weight:700;font-size:1rem;cursor:pointer;display:inline-flex;align-items:center;gap:9px;box-shadow:0 10px 24px -10px var(--pink);transition:transform .18s,box-shadow .18s,opacity .2s;white-space:nowrap}
+.form-submit-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -10px var(--pink)}
+.form-submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.form-submit-btn .spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:form-spin .7s linear infinite;display:none}
+.form-submit-btn.loading .spin{display:block}
+.form-submit-btn.loading .btn-text{display:none}
+@keyframes form-spin{to{transform:rotate(360deg)}}
+.form-success-box{display:none;text-align:center;padding:48px 24px}
+.form-success-box.show{display:block;animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+.form-success-box .ok-ring{width:80px;height:80px;background:linear-gradient(135deg,var(--green),#5aa025);border-radius:50%;margin:0 auto 22px;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(125,190,58,.55)}
+.form-success-box .ok-ring svg{width:38px;height:38px;stroke:#fff;stroke-width:3}
+.form-success-box h3{font-size:1.5rem;font-weight:700;margin-bottom:8px}
+.form-success-box p{color:var(--muted);max-width:36ch;margin:0 auto}
+.form-error-msg{color:#e63946;font-size:.88rem;font-weight:600;margin-top:10px;display:none}
+.form-error-msg.show{display:block}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:1}.form-footer{flex-direction:column;align-items:stretch}.form-submit-btn{justify-content:center}}
+
+/* ======== FIDGET SPINNER ======== */
+#sq-game-main{display:flex;align-items:center;gap:28px;justify-content:center}
+#sq-spinner-side{display:flex;flex-direction:column;align-items:center;gap:8px;flex:none}
+#sq-spinner{width:88px;height:88px;cursor:grab;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent;transition:filter .3s;will-change:transform}
+#sq-spinner:active{cursor:grabbing}
+#sq-spinner circle.lobe{fill:currentColor;transition:fill 1s}
+#sq-spinner circle.hub{fill:#fff;opacity:.92}
+#sq-spinner circle.inner{fill:currentColor;opacity:.8;transition:fill 1s}
+#sq-spin-label{font-family:"Golos Text",sans-serif;font-size:.7rem;color:rgba(255,255,255,.38);font-weight:600;letter-spacing:.06em;text-align:center;line-height:1.3}
+#sq-spin-glow{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(236,45,139,.18) 0%,transparent 70%);transition:background .3s;animation:spin-glow-pulse 2s ease-in-out infinite}
+@keyframes spin-glow-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* shape use tip */
+#sq-use-tip{font-family:"Golos Text",sans-serif;font-size:.8rem;color:rgba(255,255,255,.45);text-align:center;max-width:22ch;line-height:1.45;margin-top:2px;min-height:2.4em;transition:opacity .25s}
+
+@media(max-width:500px){
+  #sq-game-main{flex-direction:column;gap:16px}
+  #sq-spinner-side{flex-direction:row;gap:14px}
+}
+
+/* ======== PROBLEM STRIP ======== */
+.prob-strip{background:var(--ink);padding:56px 0}
+.prob-strip .proof-row{border:none}
+.prob-strip .proof{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)}
+.prob-strip .proof .big span{color:#fff}
+.prob-strip .proof p{color:rgba(255,255,255,.68)}
+.prob-strip .proof .u{color:rgba(255,255,255,.38)}
+.prob-strip .strip-head{text-align:center;margin-bottom:36px}
+.prob-strip .strip-head .eyebrow{color:var(--pink)}
+.prob-strip .strip-head h2{color:#fff;font-size:clamp(1.5rem,3.5vw,2.2rem)}
+.scale-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.scale-step{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:22px 20px;color:#fff}
+.scale-step .s-num{font-family:"Unbounded",sans-serif;font-weight:800;font-size:.75rem;letter-spacing:.12em;opacity:.45;margin-bottom:8px;text-transform:uppercase}
+.scale-step h4{font-family:"Unbounded",sans-serif;font-size:.88rem;font-weight:700;margin-bottom:8px;line-height:1.25}
+.scale-step p{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.55}
+.scale-step .s-tag{display:inline-block;margin-top:10px;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.08);letter-spacing:.04em}
+@media(max-width:640px){.scale-steps{grid-template-columns:1fr}}
+@media(max-width:900px){.scale-steps{grid-template-columns:1fr 1fr}}
+
+/* ======== INTRO CURTAIN ======== */
+#intro{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:all}
+#intro-l,#intro-r{position:absolute;top:0;bottom:0;width:51%;background:#1B1726;z-index:1;will-change:transform}
+#intro-l{left:0;transition:transform 1s cubic-bezier(.77,0,.18,1) .05s}
+#intro-r{right:0;transition:transform 1s cubic-bezier(.77,0,.18,1)}
+#intro.curtain-open #intro-l{transform:translateX(-101%)}
+#intro.curtain-open #intro-r{transform:translateX(101%)}
+#intro-c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;transition:opacity .32s ease,transform .32s cubic-bezier(.4,0,.6,1)}
+#intro.curtain-open #intro-c{opacity:0;transform:scale(1.08) translateY(-12px);pointer-events:none}
+#ilogo{width:118px;height:118px;margin-bottom:24px}
+#ilogo svg{width:118px;height:118px;overflow:visible}
+.ip{transition:transform .7s cubic-bezier(.2,.9,.3,1),opacity .5s ease;will-change:transform,opacity}
+.ip.off-tl{transform:translate(-130px,-130px) scale(.25);opacity:0}
+.ip.off-tr{transform:translate(130px,-130px) scale(.25);opacity:0}
+.ip.off-bl{transform:translate(-130px,130px) scale(.25);opacity:0}
+.ip.off-br{transform:translate(130px,130px) scale(.25);opacity:0}
+#ititle{font-family:"Unbounded",sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.2rem);color:#fff;letter-spacing:-.02em;opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s cubic-bezier(.2,.9,.3,1)}
+#ititle.vis{opacity:1;transform:none}
+#itag{font-family:"Golos Text",sans-serif;font-size:.98rem;color:rgba(255,255,255,.5);margin-top:10px;opacity:0;transition:opacity .5s .12s}
+#itag.vis{opacity:1}
+#ibar-w{width:170px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:32px;overflow:hidden;opacity:0;transition:opacity .3s}
+#ibar-w.vis{opacity:1}
+#ibar{height:100%;width:0%;background:linear-gradient(90deg,#EC2D8B,#8A6CFF 50%,#1FA9E6);border-radius:2px}
+#intro-skip{position:absolute;bottom:28px;right:28px;z-index:3;background:rgba(255,255,255,.08);color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:8px 18px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:"Golos Text",sans-serif;transition:background .2s,color .2s}
+#intro-skip:hover{background:rgba(255,255,255,.16);color:#fff}
+
+/* ======== DARK THEME ======== */
+body.dark{
+  --bg:#0e0b16;--card:#18132a;--pinkbg:#160c17;
+  --ink:#ede6f8;--muted:#8f85a3;--hair:#2a2240;
+  --blue-wash:#091420;--pink-wash:#17090f;
+  --orange-wash:#160e05;--green-wash:#0a1108;
+}
+body.dark .nav{background:rgba(14,11,22,.92)!important;border-bottom-color:#2a2240}
+body.dark .hero{background:radial-gradient(110% 90% at 88% -10%,rgba(236,45,139,.13) 0%,transparent 55%),radial-gradient(90% 80% at -8% 20%,rgba(31,169,230,.09) 0%,transparent 50%),#0e0b16}
+body.dark .hero .eyebrow{background:#18132a;color:var(--pink)}
+body.dark .hero .lead{color:rgba(237,230,248,.72)}
+body.dark .hero .wave path{fill:#0e0b16}
+body.dark .chip{background:#18132a;border-color:#2a2240}
+body.dark .chip b{color:var(--ink)}
+body.dark .btn-ghost{border-color:#3a3050;color:var(--ink)}
+body.dark .btn-ghost:hover{background:#2a2240;color:#fff}
+body.dark .section.why{background:#120f1e}
+body.dark .foot{background:#080613;border-top-color:#2a2240}
+/* cards & boxes */
+body.dark .proof{background:#18132a;border-color:#2a2240}
+body.dark .feat{background:#18132a;border-color:#2a2240}
+body.dark .uc{background:#18132a;border-color:#2a2240}
+body.dark .seg{background:#18132a;border-color:#2a2240}
+body.dark .member{background:#18132a;border-color:#2a2240}
+body.dark .item{background:#18132a;border-color:#2a2240}
+body.dark .item .pic{background:#0e0b16}
+body.dark .replay{background:#18132a;color:var(--ink);border-color:#2a2240}
+body.dark .real-photo{background:#18132a;border-color:#2a2240}
+body.dark .boxpanel{background:linear-gradient(180deg,rgba(236,45,139,.08) 0%,#0e0b16 100%);border-color:#2a2240}
+body.dark .cont-foot{background:rgba(236,45,139,.08);border:1px solid rgba(236,45,139,.15)}
+body.dark .cont-foot p{color:var(--pink)}
+body.dark .about-pills span{background:#18132a;border-color:#2a2240}
+body.dark .about-card{background:linear-gradient(135deg,#1e1030,#18132a);border-color:#2a2240}
+/* modal */
+body.dark .modal-card{background:#18132a;border:1px solid #2a2240}
+body.dark .modal-body li{color:var(--ink)}
+body.dark .modal-close{background:#0e0b16;color:var(--ink)}
+body.dark .modal-close:hover{background:#2a2240}
+body.dark .m-pink .tagrow span{background:rgba(236,45,139,.15);color:var(--pink)}
+body.dark .m-blue .tagrow span{background:rgba(31,169,230,.12);color:var(--blue)}
+body.dark .m-green .tagrow span{background:rgba(125,190,58,.12);color:var(--green)}
+/* form */
+body.dark .order-form-wrap{background:#18132a;border-color:#2a2240}
+body.dark .form-input{background:#0e0b16;border-color:#2a2240;color:var(--ink)}
+body.dark .form-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,45,139,.15)}
+/* scale steps */
+body.dark .scale-step{background:rgba(255,255,255,.04)}
+
+/* theme toggle */
+#theme-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;border:2px solid var(--hair);background:transparent;cursor:pointer;color:var(--muted);transition:color .2s,border-color .2s,background .2s;flex:none}
+#theme-btn:hover{color:var(--ink);border-color:var(--ink)}
+#theme-btn svg{width:18px;height:18px;pointer-events:none}
+
+/* ======== SQUISH GAME ======== */
+#sqbtn{position:fixed;bottom:28px;right:28px;z-index:500;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:12px 20px 12px 16px;font-family:"Golos Text",sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 8px 28px -6px rgba(27,23,38,.45);transition:transform .2s,box-shadow .2s}
+#sqbtn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 16px 36px -6px rgba(27,23,38,.5)}
+#sqbtn .sq-emoji{font-size:1.15rem;line-height:1}
+
+/* overlay */
+#sqgame{position:fixed;inset:0;z-index:8000;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s,background .9s;overflow:hidden;background:radial-gradient(ellipse at 50% 120%,#2a0e1f 0%,#100820 50%,#080612 100%)}
+#sqgame.open{opacity:1;pointer-events:all}
+/* ambient bg glow that follows mood */
+#sq-glow{position:absolute;inset:0;pointer-events:none;transition:background 1.2s ease}
+
+/* close */
+#sqgame-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);width:44px;height:44px;border-radius:50%;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s,transform .2s;line-height:1;z-index:1}
+#sqgame-close:hover{background:rgba(255,255,255,.16);color:#fff;transform:rotate(90deg)}
+
+/* stress meter */
+#sq-meter{width:min(320px,80vw);margin-bottom:32px}
+#sq-meter-labels{display:flex;justify-content:space-between;font-family:"Golos Text",sans-serif;font-size:.75rem;font-weight:600;color:rgba(255,255,255,.35);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase}
+#sq-meter-bg{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+#sq-meter-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#7DBE3A,#1FA9E6,#8A6CFF,#EC2D8B);background-size:300% 100%;background-position:0% 0%;width:100%;transition:width .5s cubic-bezier(.4,0,.2,1),background-position 1.2s ease}
+
+/* ball area */
+#sqball-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:280px;height:280px}
+
+/* glow rings */
+#sq-glow-rings{position:absolute;inset:0;pointer-events:none}
+.sq-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid rgba(236,45,139,.15);transform:translate(-50%,-50%);transition:border-color 1s}
+.sq-ring:nth-child(1){width:220px;height:220px;animation:sq-ring-pulse 2.8s ease-in-out infinite}
+.sq-ring:nth-child(2){width:260px;height:260px;animation:sq-ring-pulse 2.8s ease-in-out infinite .4s}
+.sq-ring:nth-child(3){width:300px;height:300px;animation:sq-ring-pulse 2.8s ease-in-out infinite .8s}
+@keyframes sq-ring-pulse{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:.15;transform:translate(-50%,-50%) scale(1.04)}}
+
+/* the ball */
+#sqball{
+  position:relative;z-index:2;
+  width:190px;height:190px;border-radius:50%;
+  background:radial-gradient(circle at 36% 30%,#ffaad8 0%,#EC2D8B 38%,#8c0a47 75%,#5a0030 100%);
+  box-shadow:
+    0 0 0 12px rgba(236,45,139,.08),
+    0 0 0 28px rgba(236,45,139,.04),
+    0 28px 60px -8px rgba(236,45,139,.6),
+    inset 0 -18px 28px rgba(0,0,0,.25),
+    inset 0 12px 22px rgba(255,255,255,.18);
+  cursor:pointer;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent;
+  animation:sq-idle 4s ease-in-out infinite;
+  transition:box-shadow 1s,background 1s;
+  will-change:transform;
+}
+/* highlight dot */
+#sqball::after{content:'';position:absolute;top:22%;left:28%;width:28%;height:20%;border-radius:50%;background:rgba(255,255,255,.3);transform:rotate(-30deg);filter:blur(4px);pointer-events:none}
+
+/* idle organic blob wobble */
+@keyframes sq-idle{
+  0%,100%{border-radius:50%;transform:scale(1)}
+  20%{border-radius:52% 48% 55% 45% / 45% 52% 48% 55%;transform:scale(1.015) rotate(-0.8deg)}
+  45%{border-radius:47% 53% 46% 54% / 55% 46% 54% 45%;transform:scale(0.988) rotate(0.5deg)}
+  70%{border-radius:53% 47% 48% 52% / 48% 55% 45% 52%;transform:scale(1.01) rotate(-0.4deg)}
+}
+
+#sqball.sq-press{animation:none!important}
+#sqball.sq-bounce{animation:sq-bounce .6s cubic-bezier(.15,1.7,.38,1) forwards}
+@keyframes sq-bounce{
+  0%  {transform:scaleX(var(--sx,1.35)) scaleY(var(--sy,.68));border-radius:55% 45% 55% 45% / 45% 55% 45% 55%}
+  30% {transform:scaleX(.91) scaleY(1.09);border-radius:48% 52% 50% 50% / 50% 48% 52% 50%}
+  60% {transform:scaleX(1.03) scaleY(.98);border-radius:50%}
+  80% {transform:scaleX(.99) scaleY(1.01)}
+  100%{transform:scale(1);border-radius:50%}
+}
+@keyframes sq-shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-7px) rotate(-1deg)}
+  40%{transform:translateX(6px) rotate(1deg)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(3px)}
+}
+#sqball-wrap.shake{animation:sq-shake .35s ease}
+
+/* face */
+#sq-face{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.6rem;pointer-events:none;z-index:3;transition:transform .2s cubic-bezier(.2,1.4,.4,1);text-shadow:0 2px 8px rgba(0,0,0,.3)}
+#sq-face.pop{animation:sq-face-pop .3s cubic-bezier(.2,1.5,.4,1)}
+@keyframes sq-face-pop{0%{transform:translate(-50%,-50%) scale(.6)}60%{transform:translate(-50%,-50%) scale(1.2)}100%{transform:translate(-50%,-50%) scale(1)}}
+
+/* score + mood */
+#sq-bottom{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:24px}
+#sq-count{font-family:"Unbounded",sans-serif;color:#fff;font-size:3.2rem;font-weight:800;line-height:1;min-width:3ch;text-align:center;text-shadow:0 4px 20px rgba(236,45,139,.5);transition:color .8s}
+#sq-label{font-family:"Golos Text",sans-serif;color:rgba(255,255,255,.35);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+#sq-mood-name{font-family:"Golos Text",sans-serif;font-size:.9rem;font-weight:600;color:rgba(255,255,255,.6);margin-top:10px;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);transition:color .8s,border-color .8s,background .8s}
+#sq-msg{font-family:"Golos Text",sans-serif;color:rgba(255,255,255,.55);font-size:.95rem;margin-top:12px;min-height:1.4em;text-align:center;max-width:28ch}
+#sq-msg.flash{animation:sq-flash .35s ease}
+@keyframes sq-flash{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0;transform:scale(.95)}}
+
+/* particles */
+.sq-p{position:absolute;pointer-events:none;border-radius:50%;animation:sq-part var(--dur,.8s) ease-out forwards}
+@keyframes sq-part{0%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0) rotate(var(--rot,180deg))}}
+.sq-star{clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+
+/* celebration */
+#sq-celebrate{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s}
+#sq-celebrate.show{opacity:1}
+#sq-celebrate-text{font-family:"Unbounded",sans-serif;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:800;color:#fff;text-align:center;text-shadow:0 0 40px rgba(123,190,58,.8);animation:sq-celebrate-in .5s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes sq-celebrate-in{0%{transform:scale(0) rotate(-10deg);opacity:0}100%{transform:scale(1) rotate(0deg);opacity:1}}
+
+/* shape selector */
+#sq-selector{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;justify-content:center}
+.sq-s-btn{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:16px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:background .2s,border-color .2s,transform .15s;color:rgba(255,255,255,.5);font-size:.72rem;font-weight:700;font-family:"Golos Text",sans-serif;letter-spacing:.02em;min-width:60px}
+.sq-s-btn:hover{background:rgba(255,255,255,.11);transform:translateY(-2px)}
+.sq-s-btn.active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4);color:#fff}
+.sq-s-preview{width:30px;height:30px;flex:none;transition:transform .2s}
+.sq-s-btn:hover .sq-s-preview{transform:scale(1.15)}
+.sq-s-ball{border-radius:50%;background:radial-gradient(circle at 36% 32%,#ffc0d8,#EC2D8B 46%,#6a0030)}
+.sq-s-cube{border-radius:5px;background:radial-gradient(circle at 36% 32%,#a8dcff,#1FA9E6 46%,#003d6b)}
+.sq-s-blob{border-radius:62% 38% 72% 28%/34% 58% 42% 66%;background:radial-gradient(circle at 38% 34%,#d8c0ff,#8A6CFF 42%,#3a1080)}
+.sq-s-star{clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);background:radial-gradient(circle at 40% 35%,#fffaaa,#FFCE00 46%,#8b6000)}
+.sq-s-heart{clip-path:path('M 15 8 A 8 8 0 0 1 30 8 A 8 8 0 0 1 45 8 Q 45 20 30 30 Q 15 20 15 8 Z');background:radial-gradient(circle at 38% 32%,#ffb0cc,#e63946 46%,#6a0018)}
+
+/* shape-specific idle animations */
+@keyframes sq-idle-cube{0%,100%{border-radius:16%;transform:scale(1) rotate(0deg)}30%{border-radius:18% 14% 18% 14%;transform:scale(1.02) rotate(1.5deg)}65%{border-radius:14% 18% 14% 18%;transform:scale(0.99) rotate(-1deg)}}
+@keyframes sq-idle-blob{0%{border-radius:62% 38% 72% 28%/34% 58% 42% 66%}25%{border-radius:42% 58% 52% 48%/68% 32% 68% 32%}50%{border-radius:72% 28% 42% 58%/52% 68% 32% 48%}75%{border-radius:38% 62% 68% 32%/46% 54% 46% 54%}100%{border-radius:62% 38% 72% 28%/34% 58% 42% 66%}}
+@keyframes sq-idle-star{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.04) rotate(8deg)}}
+@keyframes sq-idle-heart{0%,100%{transform:scale(1)}40%{transform:scale(1.05)}70%{transform:scale(.97)}}
+
+</style>
+</head>
+<body id="top">
+
+<!-- INTRO SPLASH -->
+<div id="intro" aria-hidden="true">
+  <div id="intro-l"></div>
+  <div id="intro-r"></div>
+  <div id="intro-c">
+    <div id="ilogo">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <g class="ip off-tl">
+          <path d="M 20 20 L 120 20 L 120 58 C 120 65 126.4 50 129.2 52 C 135.6 53 140 62 140 70 C 140 78 135.6 87 129.2 88 C 126.4 90 120 75 120 82 L 120 120 L 82 120 C 75 120 90 126.4 88 129.2 C 87 135.6 78 140 70 140 C 62 140 53 135.6 52 129.2 C 50 126.4 65 120 58 120 L 20 120 Z" fill="#EC2D8B"/>
+        </g>
+        <g class="ip off-tr">
+          <path d="M 120 20 L 220 20 L 220 120 L 182 120 C 175 120 190 126.4 188 129.2 C 187 135.6 178 140 170 140 C 162 140 153 135.6 152 129.2 C 150 126.4 165 120 158 120 L 120 120 L 120 82 C 120 75 113.6 90 110.8 88 C 104.4 87 100 78 100 70 C 100 62 104.4 53 110.8 52 C 113.6 50 120 65 120 58 Z" fill="#1FA9E6"/>
+        </g>
+        <g class="ip off-bl">
+          <path d="M 20 120 L 58 120 C 65 120 50 113.6 52 110.8 C 53 104.4 62 100 70 100 C 78 100 87 104.4 88 110.8 C 90 113.6 75 120 82 120 L 120 120 L 120 158 C 120 165 126.4 150 129.2 152 C 135.6 153 140 162 140 170 C 140 178 135.6 187 129.2 188 C 126.4 190 120 175 120 182 L 120 220 L 20 220 Z" fill="#F7951E"/>
+        </g>
+        <g class="ip off-br">
+          <path d="M 120 120 L 158 120 C 165 120 150 113.6 152 110.8 C 153 104.4 162 100 170 100 C 178 100 187 104.4 188 110.8 C 190 113.6 175 120 182 120 L 220 120 L 220 220 L 120 220 L 120 182 C 120 175 113.6 190 110.8 188 C 104.4 187 100 178 100 170 C 100 162 104.4 153 110.8 152 C 113.6 150 120 165 120 158 Z" fill="#7DBE3A"/>
+        </g>
+      </svg>
+    </div>
+    <div id="ititle">Sensory&nbsp;Kit</div>
+    <div id="itag">Сенсорная поддержка прямо в классе</div>
+    <div id="ibar-w"><div id="ibar"></div></div>
+  </div>
+  <button id="intro-skip">Пропустить</button>
+</div>
+
+<!-- SQUISH GAME BUTTON -->
+<button id="sqbtn" aria-label="Открыть антистресс">
+  <span class="sq-emoji">🫧</span> Антистресс
+</button>
+
+<!-- SQUISH GAME OVERLAY -->
+<div id="sqgame" role="dialog" aria-modal="true" aria-label="Антистресс-сквиш">
+  <div id="sq-glow"></div>
+  <button id="sqgame-close" aria-label="Закрыть">×</button>
+
+  <!-- shape selector -->
+  <div id="sq-selector">
+    <button class="sq-s-btn active" data-shape="ball">
+      <div class="sq-s-preview sq-s-ball"></div>Шарик
+    </button>
+    <button class="sq-s-btn" data-shape="cube">
+      <div class="sq-s-preview sq-s-cube"></div>Кубик
+    </button>
+    <button class="sq-s-btn" data-shape="blob">
+      <div class="sq-s-preview sq-s-blob"></div>Слизь
+    </button>
+    <button class="sq-s-btn" data-shape="star">
+      <div class="sq-s-preview sq-s-star"></div>Звезда
+    </button>
+    <button class="sq-s-btn" data-shape="heart">
+      <div class="sq-s-preview sq-s-heart"></div>Сердце
+    </button>
+  </div>
+
+  <!-- stress meter -->
+  <div id="sq-meter">
+    <div id="sq-meter-labels"><span>😤 стресс</span><span>расслаблен 🧘</span></div>
+    <div id="sq-meter-bg"><div id="sq-meter-fill"></div></div>
+  </div>
+
+  <!-- ball + spinner row -->
+  <div id="sq-game-main">
+    <div id="sqball-wrap">
+      <div id="sq-glow-rings">
+        <div class="sq-ring"></div><div class="sq-ring"></div><div class="sq-ring"></div>
+      </div>
+      <div id="sqball" tabindex="0" role="button" aria-label="Сжать шарик"></div>
+      <div id="sq-face" aria-hidden="true">😤</div>
+    </div>
+
+    <!-- fidget spinner -->
+    <div id="sq-spinner-side">
+      <div style="position:relative">
+        <div id="sq-spin-glow"></div>
+        <svg id="sq-spinner" viewBox="0 0 100 100" aria-label="Спиннер — крути" role="button" tabindex="0">
+          <circle class="lobe" cx="50" cy="19" r="17"/>
+          <circle class="lobe" cx="50" cy="19" r="17" transform="rotate(120 50 50)"/>
+          <circle class="lobe" cx="50" cy="19" r="17" transform="rotate(240 50 50)"/>
+          <circle class="hub"  cx="50" cy="50" r="13"/>
+          <circle class="inner" cx="50" cy="50" r="7"/>
+        </svg>
+      </div>
+      <div id="sq-spin-label">Раскрути<br>пальцем</div>
+      <div id="sq-use-tip"></div>
+    </div>
+  </div>
+
+  <!-- score -->
+  <div id="sq-bottom">
+    <div id="sq-count">0</div>
+    <div id="sq-label">сжатий</div>
+    <div id="sq-mood-name">Напряжён</div>
+    <div id="sq-msg">Зажми и держи 🤏</div>
+  </div>
+
+  <!-- celebration -->
+  <div id="sq-celebrate">
+    <div id="sq-celebrate-text">🧘 Ты расслабился!<br><span style="font-size:.6em;opacity:.7">Отличная работа</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand-mark" href="#top" aria-label="Sensory Kit — на главную">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <path d="M 20 20 L 120 20 L 120 58 C 120 65 126.4 50 129.2 52 C 135.6 53 140 62 140 70 C 140 78 135.6 87 129.2 88 C 126.4 90 120 75 120 82 L 120 120 L 82 120 C 75 120 90 126.4 88 129.2 C 87 135.6 78 140 70 140 C 62 140 53 135.6 52 129.2 C 50 126.4 65 120 58 120 L 20 120 Z" fill="#EC2D8B"/>
+        <path d="M 120 20 L 220 20 L 220 120 L 182 120 C 175 120 190 126.4 188 129.2 C 187 135.6 178 140 170 140 C 162 140 153 135.6 152 129.2 C 150 126.4 165 120 158 120 L 120 120 L 120 82 C 120 75 113.6 90 110.8 88 C 104.4 87 100 78 100 70 C 100 62 104.4 53 110.8 52 C 113.6 50 120 65 120 58 Z" fill="#1FA9E6"/>
+        <path d="M 20 120 L 58 120 C 65 120 50 113.6 52 110.8 C 53 104.4 62 100 70 100 C 78 100 87 104.4 88 110.8 C 90 113.6 75 120 82 120 L 120 120 L 120 158 C 120 165 126.4 150 129.2 152 C 135.6 153 140 162 140 170 C 140 178 135.6 187 129.2 188 C 126.4 190 120 175 120 182 L 120 220 L 20 220 Z" fill="#F7951E"/>
+        <path d="M 120 120 L 158 120 C 165 120 150 113.6 152 110.8 C 153 104.4 162 100 170 100 C 178 100 187 104.4 188 110.8 C 190 113.6 175 120 182 120 L 220 120 L 220 220 L 120 220 L 120 182 C 120 175 113.6 190 110.8 188 C 104.4 187 100 178 100 170 C 100 162 104.4 153 110.8 152 C 113.6 150 120 165 120 158 Z" fill="#7DBE3A"/>
+      </svg>
+      Sensory&nbsp;Kit
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#top">Главная</a>
+      <a href="#dlya-chego">Для чего</a>
+      <a href="#pochemu">Почему работает</a>
+      <a href="podrobnee.html">Наполнение</a>
+      <a href="#primenenie">Применение</a>
+      <a href="o-nas.html">О нас</a>
+      <a href="otzyvy.html">Отзывы</a>
+      <a class="btn btn-primary" href="zakaz.html">Заказать бокс</a>
+    </nav>
+    <button id="theme-btn" aria-label="Переключить тему" title="Тёмная / светлая тема">
+      <svg id="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg id="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-in">
+    <div>
+      <span class="eyebrow">🧩 Волонтёрский проект Sensory&nbsp;Regulation&nbsp;Systems · Алматы</span>
+      <h1>Sensory&nbsp;Kit<span class="dot">.</span></h1>
+      <p class="lead">Готовый набор психоэмоциональной сенсорной поддержки для школ, экстренных служб и семей — там, где психолога нет рядом.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="zakaz.html">Заказать бокс</a>
+        <a class="btn btn-ghost" href="podrobnee.html">Открыть бокс →</a>
+      </div>
+      <div class="chips">
+        <div class="chip c-pink"><b data-count="25">0</b><span>школ — первый этап</span></div>
+        <div class="chip c-blue"><b data-count="40" data-prefix="~">0</b><span>приборов в боксе</span></div>
+        <div class="chip c-green"><b data-count="4">0</b><span>органа чувств</span></div>
+      </div>
+    </div>
+    <div class="art">
+      <div class="brain-stage">
+        <svg class="toy t1" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="26" fill="#EC2D8B"/><g fill="#fff" opacity=".85"><circle cx="20" cy="22" r="3"/><circle cx="33" cy="18" r="3"/><circle cx="42" cy="28" r="3"/><circle cx="24" cy="36" r="3"/><circle cx="37" cy="38" r="3"/><circle cx="30" cy="28" r="3"/></g></svg>
+        <svg class="toy t2" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="24" fill="none" stroke="#7DBE3A" stroke-width="10"/></svg>
+        <svg class="toy t3" viewBox="0 0 60 60" aria-hidden="true"><g fill="#1FA9E6"><circle cx="30" cy="14" r="9"/><circle cx="14" cy="40" r="9"/><circle cx="46" cy="40" r="9"/></g><circle cx="30" cy="30" r="6" fill="#FFCE00"/></svg>
+        <svg class="brain" id="brain" viewBox="0 0 240 240" role="img" aria-label="Логотип Sensory Kit: четыре пазла — зрение, вкус, слух, обоняние">
+          <g class="piece p-eye" data-sense="Зрение">
+            <path d="M 20 20 L 120 20 L 120 58 C 120 65 126.4 50 129.2 52 C 135.6 53 140 62 140 70 C 140 78 135.6 87 129.2 88 C 126.4 90 120 75 120 82 L 120 120 L 82 120 C 75 120 90 126.4 88 129.2 C 87 135.6 78 140 70 140 C 62 140 53 135.6 52 129.2 C 50 126.4 65 120 58 120 L 20 120 L 20 20 Z" fill="#EC2D8B"/>
+            <g class="ico" transform="translate(64,66)" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M-17 0 Q0 -13 17 0 Q0 13 -17 0 Z"/><circle cx="0" cy="0" r="5.5" fill="#fff" stroke="none"/></g>
+          </g>
+          <g class="piece p-taste" data-sense="Вкус">
+            <path d="M 120 20 L 220 20 L 220 120 L 182 120 C 175 120 190 126.4 188 129.2 C 187 135.6 178 140 170 140 C 162 140 153 135.6 152 129.2 C 150 126.4 165 120 158 120 L 120 120 L 120 82 C 120 75 113.6 90 110.8 88 C 104.4 87 100 78 100 70 C 100 62 104.4 53 110.8 52 C 113.6 50 120 65 120 58 L 120 20 Z" fill="#1FA9E6"/>
+            <g class="ico" transform="translate(166,64)"><path d="M-17 -4 Q0 8 17 -4" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M-8 0 Q0 17 8 0 Z" fill="#fff"/></g>
+          </g>
+          <g class="piece p-ear" data-sense="Слух">
+            <path d="M 20 120 L 58 120 C 65 120 50 113.6 52 110.8 C 53 104.4 62 100 70 100 C 78 100 87 104.4 88 110.8 C 90 113.6 75 120 82 120 L 120 120 L 120 158 C 120 165 126.4 150 129.2 152 C 135.6 153 140 162 140 170 C 140 178 135.6 187 129.2 188 C 126.4 190 120 175 120 182 L 120 220 L 20 220 L 20 120 Z" fill="#F7951E"/>
+            <g class="ico" transform="translate(64,168)" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M-8 -8 C-8 -18 9 -18 9 -5 C9 3 1 4 1 11 C1 16 -4 18 -8 14"/><path d="M-3 -5 C-3 -9 3 -9 3 -5"/></g>
+          </g>
+          <g class="piece p-nose" data-sense="Обоняние">
+            <path d="M 120 120 L 158 120 C 165 120 150 113.6 152 110.8 C 153 104.4 162 100 170 100 C 178 100 187 104.4 188 110.8 C 190 113.6 175 120 182 120 L 220 120 L 220 220 L 120 220 L 120 182 C 120 175 113.6 190 110.8 188 C 104.4 187 100 178 100 170 C 100 162 104.4 153 110.8 152 C 113.6 150 120 165 120 158 L 120 120 Z" fill="#7DBE3A"/>
+            <g class="ico" transform="translate(170,166)" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -16 C-2 -6 -9 -2 -10 7 C-11 14 -3 15 0 11 C3 15 11 14 10 7 C9 -2 2 -6 0 -16"/></g>
+          </g>
+        </svg>
+        <div class="sense-tip" id="senseTip">Зрение</div>
+      </div>
+    </div>
+  </div>
+  <div class="wave" aria-hidden="true"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,40 C240,8 480,8 720,30 C960,52 1200,52 1440,24 L1440,60 L0,60 Z" fill="#FFFDF9"/></svg></div>
+</section>
+
+<!-- ПРОБЛЕМА И МАСШТАБ -->
+<section class="prob-strip">
+  <div class="wrap">
+    <div class="strip-head reveal">
+      <span class="eyebrow">Почему это важно</span>
+      <h2>237 тысяч детей — и система не справляется</h2>
+    </div>
+    <div class="proof-row reveal">
+      <div class="proof">
+        <div class="big"><span data-count="237" data-suffix="&thinsp;тыс.">0</span></div>
+        <p>детей с ООП в Казахстане — на 539 организаций. Больше 400 детей на одну</p>
+      </div>
+      <div class="proof">
+        <div class="big"><span data-count="74" data-suffix="%">0</span></div>
+        <p>подростков испытывают высокий академический стресс. Инструментов первой помощи нет</p>
+        <span class="u">Haritay et al., Frontiers in Public Health, 2025</span>
+      </div>
+      <div class="proof">
+        <div class="big"><span data-count="24800">0</span></div>
+        <p>учеников охватим в 25 школах первого этапа — плюс пожарная служба Алматы</p>
+      </div>
+    </div>
+    <div class="scale-steps reveal">
+      <div class="scale-step">
+        <div class="s-num">Этап 1 · сейчас</div>
+        <h4>25 школ и пожарная служба Алматы</h4>
+        <p>24&nbsp;800 учеников, 20 пожарных частей, 120 выездных машин. Начальное финансирование — 3 млн тенге.</p>
+        <span class="s-tag" style="color:var(--pink)">Пилот · доказательная база</span>
+      </div>
+      <div class="scale-step">
+        <div class="s-num">Этап 2 · Алматы</div>
+        <h4>360 школ и все экстренные службы города</h4>
+        <p>357&nbsp;222 школьника, 400–500 бригад МЧС, полиции и скорой. Модель 1+1: каждый проданный бокс — один бесплатный в гос. школу.</p>
+        <span class="s-tag" style="color:var(--blue)">Коммерческая устойчивость</span>
+      </div>
+      <div class="scale-step">
+        <div class="s-num">Этап 3 · Казахстан</div>
+        <h4>8 000+ школ по всей стране</h4>
+        <p>4,1 млн школьников, 237 тыс. детей с ООП, 1 500–2 000 бригад. Далее — Кыргызстан, Узбекистан, Таджикистан.</p>
+        <span class="s-tag" style="color:var(--green)">Национальный масштаб</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ДЛЯ ЧЕГО -->
+<section class="section" id="dlya-chego">
+  <div class="wrap">
+    <div class="shead reveal">
+      <span class="eyebrow">Для чего нужен Sensory Kit</span>
+      <h2>Пять задач, которые решает один бокс</h2>
+      <p>Сенсорные инструменты — не игрушки, а средства саморегуляции. Они дают телу нужную нагрузку, чтобы быстро вернуть спокойствие и фокус.</p>
+    </div>
+    <div class="use-grid">
+      <article class="uc u1 reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg></div><h3>Скорая помощь учителю</h3><p>Истерика, паника, конфликт — быстрый инструмент, чтобы вернуть ребёнку спокойствие, когда психолога нет рядом.</p></article>
+      <article class="uc u2 reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.3-7-9a4 4 0 017-2.6A4 4 0 0119 12c0 4.7-7 9-7 9z"/></svg></div><h3>Снятие тревоги и стресса</h3><p>Тактильная стимуляция и повторяющиеся движения успокаивают нервную систему и снижают тревожность.</p></article>
+      <article class="uc u3 reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div><h3>Концентрация на уроке</h3><p>Даёт выход лишней энергии и помогает сосредоточиться на задаче, не отвлекая других учеников.</p></article>
+      <article class="uc u4 reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a5 5 0 015-5h2a5 5 0 015 5v1"/><path d="M18 8v6M15 11h6"/></svg></div><h3>Поддержка детей с ОПП</h3><p>Для нейроразнообразных учеников (СДВГ, РАС, сенсорные особенности): инклюзия и равные условия.</p></article>
+      <article class="uc u5 reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#1B1726" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h4"/></svg></div><h3>Сенсорная пауза</h3><p>Короткий перерыв-перезагрузка — «остров спокойствия» после сложной задачи или сенсорной перегрузки.</p></article>
+    </div>
+    <div class="detail reveal">
+      <span class="eyebrow">Подробнее — что показывает практика</span>
+      <h3>Почему это действительно помогает</h3>
+      <div class="dlist">
+        <div class="di"><span class="n">01</span><p>Повторяющиеся движения — сжать мяч, перебирать кольца, крутить спиннер — успокаивают нервную систему и снимают тревогу.</p></div>
+        <div class="di"><span class="n">02</span><p>Тихие тактильные инструменты помогают вернуть фокус, не отвлекая класс — в отличие от шумных «игрушек».</p></div>
+        <div class="di"><span class="n">03</span><p>Особенно полезны детям с СДВГ, РАС и сенсорными особенностями: движение и тактильный ввод улучшают внимание.</p></div>
+        <div class="di"><span class="n">04</span><p>Сенсорный уголок с боксом работает как «место для перезагрузки» — пауза от фрустрирующей задачи и возврат к работе.</p></div>
+      </div>
+      <p class="cite">По материалам исследований и практики применения сенсорных инструментов в образовательной среде.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ПОЧЕМУ -->
+<section class="section why" id="pochemu">
+  <div class="wrap">
+    <div class="shead reveal">
+      <span class="eyebrow">Почему это работает</span>
+      <h2>Не догадки, а методика, наука и мировой опыт</h2>
+      <p>Подход построен на работе специалистов и психологов, реальном внедрении в Алматы и подтверждён исследованиями университетов. То же самое уже работает в США.</p>
+    </div>
+    <div class="feat-grid">
+      <article class="feat reveal"><div class="num">01</div><div><h3>Специалисты по сенсорной интеграции</h3><p>Состав набора разработан вместе с профильными специалистами под задачи саморегуляции.</p></div></article>
+      <article class="feat reveal"><div class="num">02</div><div><h3>Одобрено психологами школ Алматы</h3><p>Подход поддержан психологами HighTech Academy, КТЛ и других ведущих школ города.</p></div></article>
+      <article class="feat reveal"><div class="num">03</div><div><h3>Опыт центра SATR.KZ и сенсорных комнат</h3><p>Основано на практике центра SATR.KZ и проверено при установке наших сенсорных комнат.</p></div></article>
+      <article class="feat reveal"><div class="num">04</div><div><h3>Исследование с КДЛ «Олимп»</h3><p>Совместно изучаем эффективность сенсорных перерывов в школе — результаты публикуем в ближайшее время.</p></div></article>
+    </div>
+    <div class="subhead reveal">
+      <span class="eyebrow">Доказательства из науки</span>
+      <h3>Что показали исследования университетов</h3>
+      <p>Эффект сенсорных инструментов в учёбе измеряли в ведущих университетах мира.</p>
+    </div>
+    <div class="proof-row reveal">
+      <div class="proof"><div class="big"><span data-count="23" data-prefix="+" data-suffix="%">+0%</span></div><p>быстрее усвоение материала</p><span class="u">University of South Carolina, США</span></div>
+      <div class="proof"><div class="big"><span data-count="56" data-prefix="+" data-suffix="%">+0%</span></div><p>рост вовлечённости в учёбу</p><span class="u">Grand Valley State University (GVSU), США</span></div>
+      <div class="proof"><div class="big"><span data-count="93" data-suffix="%">0%</span></div><p>случаев — снижение тревожности и срывов</p><span class="u">University of Calgary, Канада</span></div>
+    </div>
+    <p class="uses reveal">А ещё сенсорные инструменты применяют <b>Cardiff University</b>, <b>Duke University</b>, <b>University of Zurich</b> и другие ведущие университеты мира.</p>
+
+    <div class="carter-teaser reveal">
+      <span class="eyebrow">🇺🇸 США · реальный аналог</span>
+      <h3>Carter’s Kits — та же модель, уже проверенная в США</h3>
+      <p>С 2019 года распространили более 24&nbsp;000 сенсорных наборов в школы и экстренные службы 44 штатов. Инструменты — те же. Наша модель 1+1 (как у TOMS) позволяет масштабировать то же самое для Казахстана без зависимости от постоянных грантов.</p>
+      <a class="btn btn-white" href="podrobnee.html">Подробнее — что показывает практика →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ПРИМЕНЕНИЕ -->
+<section class="section why" id="primenenie">
+  <div class="wrap">
+    <div class="shead reveal">
+      <span class="eyebrow">Область применения</span>
+      <h2>Один набор — три среды, где он нужен</h2>
+      <p>Нажмите «Подробнее», чтобы увидеть, как Sensory Kit помогает в каждом случае.</p>
+    </div>
+    <div class="seg-grid">
+      <article class="seg s-pink reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M21 9v6"/><path d="M6 11v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></div><h3>Школы и образование</h3><p>Боксы для классов и кабинетов психолога. Быстрая саморегуляция в течение учебного дня.</p><button class="more" data-modal="m-school">Подробнее →</button></article>
+      <article class="seg s-blue reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v5c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>МЧС и экстренные службы</h3><p>Пожарные первыми прибывают на место ЧС и контактируют с детьми в остром стрессе. Бокс в машине — немедленная сенсорная помощь.</p><button class="more" data-modal="m-mchs">Подробнее →</button></article>
+      <article class="seg s-green reveal"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg></div><h3>Семьи с детьми с ОПП</h3><p>Домашний набор: помогает справляться со стрессом и снижает всплески после школы.</p><button class="more" data-modal="m-family">Подробнее →</button></article>
+    </div>
+
+    <div class="train reveal" style="margin-top:40px">
+      <div>
+        <span class="eyebrow">Тренинг для персонала</span>
+        <h2>Закажите обучение для вашей команды</h2>
+        <p>Проведём тренинг для педагогов и сотрудников: как работать с сенсорными наборами и применять их в нестандартных ситуациях.</p>
+      </div>
+      <div class="cta-col">
+        <a class="btn btn-white" href="#kontakty">Заказать тренинг для персонала</a>
+        <a class="btn btn-white" href="podrobnee.html" style="background:rgba(255,255,255,.2);color:#fff;box-shadow:none">Что входит в бокс</a>
+      </div>
+    </div>
+
+    <div class="carter-teaser reveal" style="margin-top:40px">
+      <span class="eyebrow">Команда волонтёров</span>
+      <h3>Кто стоит за Sensory Regulation Systems</h3>
+      <p>Социальный проект школьников из Алматы при поддержке ОФ «Альтернатива SM». Узнайте, как мы провели стенд 1 июня и позиционируем себя как волонтёрский проект.</p>
+      <a class="btn btn-white" href="o-nas.html">О нас →</a>
+      <a class="btn btn-white" href="otzyvy.html" style="background:rgba(255,255,255,.2);color:#fff;box-shadow:none;margin-left:10px">Отзывы →</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- КОНТАКТЫ -->
+<section class="section" id="kontakty">
+  <div class="wrap">
+    <div class="cont-head reveal">
+      <span class="eyebrow">Контакты</span>
+      <h2>Готовы оснастить школу, службу или семью</h2>
+      <p>Напишите или позвоните — расскажем про наполнение, стоимость и условия. Работаем со школами, экстренными службами и семьями детей с ООП.</p>
+    </div>
+    <div class="team">
+      <article class="member reveal"><div class="av">ТА</div><h3>Тали Абдрахманова</h3><div class="role">Волонтёр-исследователь · основатель</div><a href="tel:+77770081108">+7 777 008 1108</a><a href="mailto:taliabd1201@gmail.com">taliabd1201@gmail.com</a></article>
+      <article class="member reveal"><div class="av">ЭМ</div><h3>Эльдана Мулькибаева</h3><div class="role">Волонтёр-исследователь · основатель</div><a href="../eldana-mulkibaeva/index.html">Личный сайт →</a><a href="tel:+77752704585">+7 775 270 4585</a><a href="mailto:emulkibayeva@gmail.com">emulkibayeva@gmail.com</a></article>
+      <article class="member reveal"><div class="av">АИ</div><h3>Анель Ибрашева</h3><div class="role">Волонтёр-исследователь · основатель</div><a href="tel:+77713417021">+7 771 341 70 21</a><a href="mailto:ibrashevaa2008@gmail.com">ibrashevaa2008@gmail.com</a></article>
+      <article class="member reveal"><div class="av">ТБ</div><h3>Тасним Бултаева</h3><div class="role">Волонтёр-исследователь · основатель</div><a href="tel:+77085555010">+7 708 555 50 10</a><a href="mailto:tasnim.bultayevanis@gmail.com">tasnim.bultayevanis@gmail.com</a></article>
+    </div>
+    <!-- ORDER FORM -->
+    <div class="order-form-wrap reveal" id="order-form-wrap">
+      <div id="order-form-inner">
+        <h3 style="font-size:1.4rem;font-weight:700;margin-bottom:6px">Заявка на бокс</h3>
+        <p style="color:var(--muted);font-size:.95rem;margin-bottom:28px">Заполните форму — мы свяжемся в течение 24 часов. Заявка придёт напрямую в наш Telegram.</p>
+        <form id="order-form" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="f-name">Ваше имя <span class="req">*</span></label>
+              <input class="form-input" id="f-name" name="name" type="text" placeholder="Имя и фамилия" required>
+            </div>
+            <div class="form-group">
+              <label for="f-type">Тип организации <span class="req">*</span></label>
+              <select class="form-input" id="f-type" name="type" required>
+                <option value="" disabled selected>Выберите...</option>
+                <option value="Государственная школа">Государственная школа</option>
+                <option value="Частная школа">Частная школа</option>
+                <option value="Экстренная служба (МЧС / пожарные / полиция)">Экстренная служба (МЧС / пожарные / полиция)</option>
+                <option value="Семья ребёнка с ООП">Семья ребёнка с ООП</option>
+                <option value="Другое">Другое</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-org">Название организации</label>
+              <input class="form-input" id="f-org" name="org" type="text" placeholder="Школа №..., ДГПБ...">
+            </div>
+            <div class="form-group">
+              <label for="f-qty">Количество боксов <span class="req">*</span></label>
+              <input class="form-input" id="f-qty" name="qty" type="number" min="1" max="500" placeholder="Например: 7" required>
+            </div>
+            <div class="form-group">
+              <label for="f-phone">Телефон / WhatsApp <span class="req">*</span></label>
+              <input class="form-input" id="f-phone" name="phone" type="tel" placeholder="+7 700 000 00 00" required>
+            </div>
+            <div class="form-group">
+              <label for="f-email">Email</label>
+              <input class="form-input" id="f-email" name="email" type="email" placeholder="you@school.kz">
+            </div>
+            <div class="form-group full">
+              <label for="f-msg">Комментарий</label>
+              <textarea class="form-input" id="f-msg" name="msg" placeholder="Расскажите о вашей ситуации, задайте вопрос..."></textarea>
+            </div>
+          </div>
+          <div class="form-footer">
+            <span class="form-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+              Данные защищены — отправляется только в Telegram команды
+            </span>
+            <button class="form-submit-btn" type="submit" id="form-submit-btn">
+              <span class="btn-text">Отправить заявку →</span>
+              <span class="spin"></span>
+            </button>
+          </div>
+          <div class="form-error-msg" id="form-error-msg"></div>
+        </form>
+      </div>
+      <div class="form-success-box" id="form-success-box">
+        <div class="ok-ring">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h3>Заявка отправлена!</h3>
+        <p>Мы получили вашу заявку и свяжемся с вами в течение 24 часов. Также можете написать напрямую: <b>sensoryrs@outlook.com</b></p>
+      </div>
+    </div>
+
+    <div class="cont-foot reveal" style="margin-top:28px">
+      <p>Партнёрство и сотрудничество: <span class="pk">sensoryrs@outlook.com</span></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="wrap">
+    <a class="brand-mark" href="#top" aria-label="Sensory Kit">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <path d="M 20 20 L 120 20 L 120 58 C 120 65 126.4 50 129.2 52 C 135.6 53 140 62 140 70 C 140 78 135.6 87 129.2 88 C 126.4 90 120 75 120 82 L 120 120 L 82 120 C 75 120 90 126.4 88 129.2 C 87 135.6 78 140 70 140 C 62 140 53 135.6 52 129.2 C 50 126.4 65 120 58 120 L 20 120 Z" fill="#EC2D8B"/>
+        <path d="M 120 20 L 220 20 L 220 120 L 182 120 C 175 120 190 126.4 188 129.2 C 187 135.6 178 140 170 140 C 162 140 153 135.6 152 129.2 C 150 126.4 165 120 158 120 L 120 120 L 120 82 C 120 75 113.6 90 110.8 88 C 104.4 87 100 78 100 70 C 100 62 104.4 53 110.8 52 C 113.6 50 120 65 120 58 Z" fill="#1FA9E6"/>
+        <path d="M 20 120 L 58 120 C 65 120 50 113.6 52 110.8 C 53 104.4 62 100 70 100 C 78 100 87 104.4 88 110.8 C 90 113.6 75 120 82 120 L 120 120 L 120 158 C 120 165 126.4 150 129.2 152 C 135.6 153 140 162 140 170 C 140 178 135.6 187 129.2 188 C 126.4 190 120 175 120 182 L 120 220 L 20 220 Z" fill="#F7951E"/>
+        <path d="M 120 120 L 158 120 C 165 120 150 113.6 152 110.8 C 153 104.4 162 100 170 100 C 178 100 187 104.4 188 110.8 C 190 113.6 175 120 182 120 L 220 120 L 220 220 L 120 220 L 120 182 C 120 175 113.6 190 110.8 188 C 104.4 187 100 178 100 170 C 100 162 104.4 153 110.8 152 C 113.6 150 120 165 120 158 Z" fill="#7DBE3A"/>
+      </svg>
+      Sensory Kit
+    </a>
+    <p>Готовый набор психоэмоциональной сенсорной поддержки для школ, экстренных служб и семей.</p>
+    <p class="small">Социальный проект Sensory Regulation Systems · при поддержке ОФ «Альтернатива SM» · команда волонтёров · Алматы, Казахстан</p>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal m-pink" id="m-school" role="dialog" aria-modal="true" aria-labelledby="m-school-t" aria-hidden="true">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="modal-close" data-close aria-label="Закрыть">×</button>
+    <div class="modal-top"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M21 9v6"/><path d="M6 11v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></div><div><div class="sub">Область применения</div><h3 id="m-school-t">Школы и образование</h3></div></div>
+    <div class="modal-body">
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Пилотный этап: 25 гос. школ Алматы, ~24&nbsp;800 учеников. Боксы передаются безвозмездно для сбора доказательной базы.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Ученик возвращает спокойствие и фокус без отрыва от урока — 74% подростков сегодня испытывают высокий стресс.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Инклюзия: равные условия для нейроразнообразных детей (СДВГ, РАС), которых в Казахстане 237 тыс. при нехватке спец. организаций.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Презентация проекта на Августовской конференции педагогических работников 2026.</li>
+      </ul>
+      <div class="tagrow"><span>25 школ · 1 этап</span><span>245 боксов бесплатно</span></div>
+    </div>
+    <div class="modal-foot"><a class="btn btn-primary" href="#kontakty" data-close>Оснастить школу</a></div>
+  </div>
+</div>
+
+<div class="modal m-blue" id="m-mchs" role="dialog" aria-modal="true" aria-labelledby="m-mchs-t" aria-hidden="true">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="modal-close" data-close aria-label="Закрыть">×</button>
+    <div class="modal-top"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v5c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></div><div><div class="sub">Область применения</div><h3 id="m-mchs-t">МЧС и экстренные службы</h3></div></div>
+    <div class="modal-body">
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Пожарные — приоритетный партнёр первого этапа: первыми прибывают на ЧС и первыми контактируют с детьми в стрессе.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Цель — 120 выездных машин пожарной службы Алматы (20 частей) и все экстренные бригады города.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Нейроразнообразные дети при ЧС особенно уязвимы: острый стресс провоцирует тяжёлый сенсорный срыв. Бокс в машине — немедленная помощь.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Протокол применения разрабатывается совместно — сотрудники проходят обучение работе с детьми в кризисных ситуациях.</li>
+      </ul>
+      <div class="tagrow"><span>120 машин · 1 этап</span><span>пожарные · полиция · скорая</span></div>
+    </div>
+    <div class="modal-foot"><a class="btn btn-primary" href="#kontakty" data-close>Обсудить внедрение</a></div>
+  </div>
+</div>
+
+<div class="modal m-green" id="m-family" role="dialog" aria-modal="true" aria-labelledby="m-family-t" aria-hidden="true">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="modal-close" data-close aria-label="Закрыть">×</button>
+    <div class="modal-top"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg></div><div><div class="sub">Область применения</div><h3 id="m-family-t">Семьи с детьми с ОПП</h3></div></div>
+    <div class="modal-body">
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Домашний набор для семей, где растёт ребёнок с особыми образовательными потребностями.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Помогает справляться со стрессом и снижает эмоциональные всплески после школы.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Понятный инструмент для родителей — как поддержать ребёнка в трудный момент.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Поддержка саморегуляции, внимания и спокойствия дома.</li>
+      </ul>
+      <div class="tagrow"><span>домашний формат</span><span>СДВГ · РАС · тревожность</span></div>
+    </div>
+    <div class="modal-foot"><a class="btn btn-primary" href="#kontakty" data-close>Получить набор</a></div>
+  </div>
+</div>
+
+<script>
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* mobile menu */
+const burger=document.getElementById('burger'), navLinks=document.getElementById('navLinks');
+if(burger && navLinks){
+  burger.addEventListener('click',()=>{const o=navLinks.classList.toggle('open');burger.setAttribute('aria-expanded',o);});
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+}
+
+/* puzzle (логотип-мозг есть только на главной странице) */
+const brain=document.getElementById('brain'), tip=document.getElementById('senseTip');
+if(brain){
+  if(!reduce){brain.classList.add('assemble');setTimeout(()=>{brain.classList.remove('assemble');brain.classList.add('breathe');},1300);}
+  brain.querySelectorAll('.piece').forEach(p=>{const l=p.getAttribute('data-sense');
+    p.addEventListener('mouseenter',()=>{if(tip){tip.textContent=l;tip.classList.add('show');}});
+    p.addEventListener('mouseleave',()=>{if(tip)tip.classList.remove('show');});});
+}
+
+/* reveal */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* count-up */
+function countUp(el){const t=+el.dataset.count,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'';
+  if(reduce){el.textContent=pre+t+suf;return;}
+  const dur=1400,st=performance.now();
+  function step(n){const k=Math.min(1,(n-st)/dur),e=1-Math.pow(1-k,3);el.textContent=pre+Math.round(t*e)+suf;if(k<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);}
+const co=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){countUp(e.target);co.unobserve(e.target);}});},{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+/* modals (есть только на главной странице) */
+let lastFocus=null;
+function openModal(id){const m=document.getElementById(id);if(!m)return;lastFocus=document.activeElement;m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';const c=m.querySelector('.modal-close');if(c)c.focus();}
+function closeModal(m){m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus)lastFocus.focus();}
+document.querySelectorAll('[data-modal]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.modal)));
+document.querySelectorAll('.modal').forEach(m=>m.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',()=>closeModal(m))));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.querySelector('.modal.open');if(o)closeModal(o);}});
+
+/* box open + items fly out (есть только на странице "Подробнее") */
+const boxwrap=document.getElementById('boxwrap'), spark=document.getElementById('spark');
+if(boxwrap){
+  const items=[...document.querySelectorAll('.item')];
+  const openBtn=document.getElementById('openBtn'), openWrap=document.getElementById('openWrap'), replayBtn=document.getElementById('replayBtn');
+  let opened=false, timers=[];
+  function mouthCenter(){const r=boxwrap.getBoundingClientRect();return {x:r.left+r.width/2, y:r.top+r.height*0.40};}
+  function resetItems(){timers.forEach(clearTimeout);timers=[];items.forEach(c=>{c.style.transition='none';c.style.transform='';c.style.opacity='0';c.classList.remove('shown');});}
+  function fly(){
+    if(reduce){items.forEach(c=>{c.style.opacity='1';c.classList.add('shown');});boxwrap.classList.add('open');return;}
+    boxwrap.classList.add('open');
+    const m=mouthCenter();
+    items.forEach(c=>{const r=c.getBoundingClientRect();const dx=m.x-(r.left+r.width/2),dy=m.y-(r.top+r.height/2);const rot=(Math.random()*40-20).toFixed(1);
+      c.style.transition='none';c.style.transform=`translate(${dx}px,${dy}px) scale(.18) rotate(${rot}deg)`;c.style.opacity='0';});
+    void boxwrap.offsetWidth;
+    items.forEach((c,i)=>{const t=setTimeout(()=>{
+        c.style.transition='transform .68s cubic-bezier(.2,.9,.35,1.25), opacity .35s ease';
+        c.style.transform='none';c.style.opacity='1';c.classList.add('shown');
+        if(spark){spark.classList.remove('go');void spark.offsetWidth;spark.classList.add('go');}
+      },380+i*300);timers.push(t);});
+    timers.push(setTimeout(()=>{if(replayBtn)replayBtn.classList.add('show');},380+items.length*300+400));
+  }
+  function openBox(){if(opened)return;opened=true;if(openWrap)openWrap.style.display='none';fly();}
+  if(openBtn)openBtn.addEventListener('click',openBox);
+  if(replayBtn)replayBtn.addEventListener('click',()=>{boxwrap.classList.remove('open');replayBtn.classList.remove('show');resetItems();setTimeout(fly,350);});
+  const auto=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!opened){openBox();auto.disconnect();}});},{threshold:.35});
+  auto.observe(boxwrap);
+}
+
+/* ======== INTRO SPLASH ======== */
+(function(){
+  const noMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const intro = document.getElementById('intro');
+  if (!intro) return;
+  if (noMotion) { intro.remove(); return; }
+
+  document.body.style.overflow = 'hidden';
+
+  function dismissIntro() {
+    intro.classList.add('curtain-open');
+    document.body.style.overflow = '';
+    setTimeout(() => intro.remove(), 1100);
+  }
+
+  const skipBtn = document.getElementById('intro-skip');
+  if (skipBtn) skipBtn.addEventListener('click', dismissIntro);
+
+  /* Step 1 — assemble logo pieces from corners */
+  const pieces = intro.querySelectorAll('.ip');
+  setTimeout(() => {
+    pieces.forEach((p, i) => {
+      setTimeout(() => p.classList.remove('off-tl','off-tr','off-bl','off-br'), i * 90);
+    });
+  }, 280);
+
+  /* Step 2 — title + tagline */
+  const ititle = document.getElementById('ititle');
+  const itag = document.getElementById('itag');
+  setTimeout(() => {
+    if (ititle) ititle.classList.add('vis');
+    if (itag) itag.classList.add('vis');
+  }, 980);
+
+  /* Step 3 — progress bar */
+  const barW = document.getElementById('ibar-w');
+  const bar = document.getElementById('ibar');
+  setTimeout(() => {
+    if (barW) barW.classList.add('vis');
+    if (bar) {
+      bar.style.transition = 'width 1.15s linear';
+      requestAnimationFrame(() => { bar.style.width = '100%'; });
+    }
+  }, 1160);
+
+  /* Step 4 — curtain splits open */
+  setTimeout(dismissIntro, 2480);
+})();
+
+/* ======== ORDER FORM → TELEGRAM ======== */
+(function(){
+  const form    = document.getElementById('order-form');
+  const btn     = document.getElementById('form-submit-btn');
+  const errEl   = document.getElementById('form-error-msg');
+  const successEl = document.getElementById('form-success-box');
+  const innerEl  = document.getElementById('order-form-inner');
+  if (!form) return;
+
+  const TG_TOKEN   = '8256696953:AAH9r1gRSiNKwL-p6kNJIWKZ1y2rUtIDMNQ';
+  const TG_CHAT_ID = '926811016';
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errEl.classList.remove('show');
+
+    const name  = form.querySelector('#f-name').value.trim();
+    const type  = form.querySelector('#f-type').value;
+    const org   = form.querySelector('#f-org').value.trim();
+    const qty   = form.querySelector('#f-qty').value.trim();
+    const phone = form.querySelector('#f-phone').value.trim();
+    const email = form.querySelector('#f-email').value.trim();
+    const msg   = form.querySelector('#f-msg').value.trim();
+
+    if (!name || !type || !qty || !phone) {
+      errEl.textContent = 'Пожалуйста, заполните обязательные поля (*)';
+      errEl.classList.add('show');
+      return;
+    }
+
+    const text = [
+      '📦 <b>Новая заявка — Sensory Kit</b>',
+      '',
+      `👤 <b>Имя:</b> ${name}`,
+      `🏢 <b>Тип:</b> ${type}`,
+      org   ? `🏫 <b>Организация:</b> ${org}` : null,
+      `📦 <b>Кол-во боксов:</b> ${qty}`,
+      `📱 <b>Телефон:</b> ${phone}`,
+      email ? `✉️ <b>Email:</b> ${email}` : null,
+      msg   ? `💬 <b>Комментарий:</b> ${msg}` : null,
+      '',
+      '🌐 Отправлено с sensory-kit сайта'
+    ].filter(l => l !== null).join('\n');
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'HTML' })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        innerEl.style.display = 'none';
+        successEl.classList.add('show');
+      } else {
+        throw new Error(data.description || 'Ошибка отправки');
+      }
+    } catch(err) {
+      errEl.textContent = 'Не удалось отправить. Напишите нам напрямую: sensoryrs@outlook.com';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  });
+})();
+
+/* ======== DARK THEME TOGGLE ======== */
+(function(){
+  const btn  = document.getElementById('theme-btn');
+  const sun  = document.getElementById('theme-icon-sun');
+  const moon = document.getElementById('theme-icon-moon');
+  if (!btn) return;
+  const saved = localStorage.getItem('sk-theme');
+  if (saved === 'dark') applyDark(true);
+
+  btn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark');
+    applyDark(isDark);
+    localStorage.setItem('sk-theme', isDark ? 'dark' : 'light');
+  });
+
+  function applyDark(on) {
+    document.body.classList.toggle('dark', on);
+    if (sun && moon) { sun.style.display = on ? 'none' : ''; moon.style.display = on ? '' : 'none'; }
+  }
+})();
+
+/* ======== SQUISH GAME ======== */
+(function(){
+  const btn      = document.getElementById('sqbtn');
+  const game     = document.getElementById('sqgame');
+  const closeBtn = document.getElementById('sqgame-close');
+  const ball     = document.getElementById('sqball');
+  const face     = document.getElementById('sq-face');
+  const wrap     = document.getElementById('sqball-wrap');
+  const glowEl   = document.getElementById('sq-glow');
+  const countEl  = document.getElementById('sq-count');
+  const moodEl   = document.getElementById('sq-mood-name');
+  const msgEl    = document.getElementById('sq-msg');
+  const meterEl  = document.getElementById('sq-meter-fill');
+  const celebrate = document.getElementById('sq-celebrate');
+  if (!btn || !game || !ball) return;
+
+  /* ---- MOOD STAGES ---- */
+  const MOODS = [
+    { name:'Напряжён',   face:'😤', ballFrom:'#ff6b6b', ballMid:'#e63946', ballTo:'#8b0000',
+      glow:'rgba(230,57,70,.22)', ring:'rgba(230,57,70,.25)', count:0  },
+    { name:'Немного лучше', face:'😬', ballFrom:'#ffb347', ballMid:'#F7951E', ballTo:'#8b4500',
+      glow:'rgba(247,149,30,.20)', ring:'rgba(247,149,30,.25)', count:5 },
+    { name:'Нейтрально', face:'😊', ballFrom:'#ffaad8', ballMid:'#EC2D8B', ballTo:'#6a0040',
+      glow:'rgba(236,45,139,.22)', ring:'rgba(236,45,139,.25)', count:12 },
+    { name:'Спокоен',    face:'😌', ballFrom:'#b3d9ff', ballMid:'#1FA9E6', ballTo:'#003d6b',
+      glow:'rgba(31,169,230,.20)', ring:'rgba(31,169,230,.25)', count:22 },
+    { name:'Дзен',       face:'🧘', ballFrom:'#c8f5b0', ballMid:'#7DBE3A', ballTo:'#2d5a00',
+      glow:'rgba(125,190,58,.20)', ring:'rgba(125,190,58,.25)', count:35 },
+  ];
+  const MSGS_BY_MOOD = [
+    ['Зажми и держи 🤏','Сильнее!','Давай ещё раз','Не сдавайся'],
+    ['Уже лучше!','Чувствуешь? 🌿','Продолжай…','Ещё немного'],
+    ['Хорошо 😌','Стресс уходит…','Ты на верном пути','Вот так!'],
+    ['Так спокойно…','Почти дзен 🌊','Дыши ровно','Великолепно'],
+    ['Абсолютный дзен 🌈','Ты расслабился!','Полная гармония ✨','Мастер покоя 🏆'],
+  ];
+
+  const STRESS_TOTAL = 35;
+  let count = 0;
+  let stress = 100;
+  let moodIdx = 0;
+  let pressing = false;
+  let pressStart = 0;
+  let pressRaf = null;
+  let audioCtx = null;
+  let celebrated = false;
+
+  /* ---- AUDIO ---- */
+  function getCtx() {
+    if (!audioCtx) { try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
+    return audioCtx;
+  }
+  function playSquish(intensity) {
+    const ctx = getCtx(); if (!ctx) return;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(180 - intensity*60, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.12);
+    g.gain.setValueAtTime(0.12, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+    o.start(); o.stop(ctx.currentTime + 0.22);
+  }
+  function playPop(intensity, moodI) {
+    const ctx = getCtx(); if (!ctx) return;
+    const freqs = [160, 200, 260, 340, 420];
+    const base = freqs[moodI] || 260;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(base, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(base * (1.8 + intensity), ctx.currentTime + 0.18);
+    g.gain.setValueAtTime(0.14 + intensity*0.06, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+    o.start(); o.stop(ctx.currentTime + 0.28);
+  }
+  function playCelebrate() {
+    const ctx = getCtx(); if (!ctx) return;
+    [0, 0.1, 0.2, 0.35].forEach((t, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      const f = [440, 554, 659, 880][i];
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.15, ctx.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.4);
+      o.start(ctx.currentTime + t);
+      o.stop(ctx.currentTime + t + 0.4);
+    });
+  }
+
+  /* ---- MOOD UPDATE ---- */
+  function getMoodIdx(c) {
+    let idx = 0;
+    MOODS.forEach((m, i) => { if (c >= m.count) idx = i; });
+    return idx;
+  }
+  function applyMood(idx) {
+    const m = MOODS[idx];
+    ball.style.background = `radial-gradient(circle at 36% 30%,${m.ballFrom} 0%,${m.ballMid} 38%,${m.ballTo} 100%)`;
+    ball.style.boxShadow = `0 0 0 12px ${m.glow.replace('.22','0.08')},0 0 0 28px ${m.glow.replace('.22','0.04')},0 28px 60px -8px ${m.glow},inset 0 -18px 28px rgba(0,0,0,.25),inset 0 12px 22px rgba(255,255,255,.18)`;
+    glowEl.style.background = `radial-gradient(ellipse at 50% 60%, ${m.glow} 0%, transparent 60%)`;
+    document.querySelectorAll('.sq-ring').forEach(r => r.style.borderColor = m.ring);
+    moodEl.textContent = m.name;
+    moodEl.style.color = m.ballMid;
+    moodEl.style.borderColor = m.ballMid + '40';
+    countEl.style.textShadow = `0 4px 20px ${m.ballMid}80`;
+  }
+
+  /* ---- STRESS METER ---- */
+  function updateMeter(c) {
+    const pct = Math.max(0, 100 - (c / STRESS_TOTAL) * 100);
+    meterEl.style.width = pct + '%';
+    const pos = (1 - pct/100) * 100;
+    meterEl.style.backgroundPosition = pos + '% 0%';
+  }
+
+  /* ---- PARTICLES ---- */
+  function burst(cx, cy, intensity, moodI) {
+    const m = MOODS[moodI];
+    const colors = [m.ballMid, m.ballFrom, '#fff', '#FFCE00', m.ballTo];
+    const n = Math.round(8 + intensity * 12);
+    for (let i = 0; i < n; i++) {
+      const p = document.createElement('div');
+      const isStar = i % 3 === 0;
+      p.className = 'sq-p' + (isStar ? ' sq-star' : '');
+      const angle = (i / n) * Math.PI * 2 + (Math.random()-.5)*.4;
+      const dist  = 55 + Math.random() * 90 * intensity;
+      const size  = isStar ? 10 + Math.random()*8 : 5 + Math.random()*9;
+      const dur   = 0.5 + Math.random() * 0.5;
+      const rot   = Math.round(Math.random() * 360);
+      p.style.cssText = `width:${size}px;height:${size}px;background:${colors[i%colors.length]};left:${cx}px;top:${cy}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;--dur:${dur}s;--rot:${rot}deg;`;
+      wrap.appendChild(p);
+      setTimeout(() => p.remove(), dur * 1000 + 50);
+    }
+  }
+
+  /* ---- OPEN / CLOSE ---- */
+  function openGame() {
+    game.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    applyMood(0);
+  }
+  function closeGame() {
+    game.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  btn.addEventListener('click', openGame);
+  closeBtn.addEventListener('click', closeGame);
+  document.addEventListener('keydown', e => { if(e.key==='Escape' && game.classList.contains('open')) closeGame(); });
+
+  /* ---- PRESS ANIMATION ---- */
+  function startPress(e) {
+    if (e.type !== 'keydown' || e.key === ' ' || e.key === 'Enter') e.preventDefault();
+    if (pressing) return;
+    pressing = true;
+    pressStart = performance.now();
+    ball.classList.remove('sq-bounce');
+    ball.classList.add('sq-press');
+    face.textContent = '😬';
+    playSquish(0.5);
+    animPress();
+  }
+
+  function animPress() {
+    if (!pressing) return;
+    const t = Math.min((performance.now() - pressStart) / 700, 1);
+    const ease = 1 - Math.pow(1 - t, 2.2);
+    const sx = 1 + ease * 0.40;
+    const sy = 1 - ease * 0.34;
+    ball.style.transform = `scaleX(${sx.toFixed(3)}) scaleY(${sy.toFixed(3)})`;
+    const br1 = 48 + ease * 8, br2 = 52 - ease * 8;
+    ball.style.borderRadius = `${br1}% ${br2}% ${br1}% ${br2}% / ${br2}% ${br1}% ${br2}% ${br1}%`;
+    pressRaf = requestAnimationFrame(animPress);
+  }
+
+  function endPress(e) {
+    if (!pressing) return;
+    pressing = false;
+    cancelAnimationFrame(pressRaf);
+
+    const held = Math.min((performance.now() - pressStart) / 700, 1);
+    ball.style.setProperty('--sx', (1 + held * 0.40).toFixed(2));
+    ball.style.setProperty('--sy', (1 - held * 0.34).toFixed(2));
+    ball.style.transform = '';
+    ball.style.borderRadius = '';
+    ball.classList.remove('sq-press');
+    ball.classList.add('sq-bounce');
+
+    /* update count & mood */
+    count++;
+    const newMood = getMoodIdx(count);
+    if (newMood !== moodIdx) { moodIdx = newMood; applyMood(moodIdx); face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop'); }
+    face.textContent = MOODS[moodIdx].face;
+
+    /* update meter */
+    updateMeter(count);
+
+    /* messages */
+    const msgs = MSGS_BY_MOOD[moodIdx];
+    msgEl.textContent = msgs[(count - 1) % msgs.length];
+    msgEl.classList.remove('flash'); void msgEl.offsetWidth; msgEl.classList.add('flash');
+
+    /* count display */
+    countEl.textContent = count;
+
+    /* sound */
+    playPop(held, moodIdx);
+
+    /* screen shake on hard squish */
+    if (held > 0.6) { wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake'); if (navigator.vibrate) navigator.vibrate(40); }
+
+    /* particles */
+    const r = ball.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+    burst(r.left - wr.left + r.width/2, r.top - wr.top + r.height/2, held, moodIdx);
+
+    /* celebrate */
+    if (!celebrated && count >= STRESS_TOTAL) {
+      celebrated = true;
+      setTimeout(() => {
+        playCelebrate();
+        celebrate.classList.add('show');
+        if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+        setTimeout(() => celebrate.classList.remove('show'), 3500);
+      }, 400);
+    }
+
+    ball.addEventListener('animationend', () => {
+      ball.classList.remove('sq-bounce');
+      ball.style.transform = '';
+    }, {once: true});
+  }
+
+  ball.addEventListener('mousedown',  startPress);
+  ball.addEventListener('touchstart', startPress, {passive: false});
+  window.addEventListener('mouseup',  endPress);
+  window.addEventListener('touchend', endPress);
+  ball.addEventListener('keydown', startPress);
+  ball.addEventListener('keyup',   endPress);
+
+  /* ---- SHAPE SWITCHER ---- */
+  const SHAPES = {
+    ball: {
+      idle:'sq-idle 4s ease-in-out infinite', br:'50%',
+      clip:null, size:190,
+      grad: m => `radial-gradient(circle at 36% 30%,${m.ballFrom} 0%,${m.ballMid} 38%,${m.ballTo} 100%)`,
+      squishBR: t => `${48+t*10}% ${52-t*10}% ${48+t*10}% ${52-t*10}%/${52-t*8}% ${48+t*8}% ${52-t*8}% ${48+t*8}%`,
+    },
+    cube: {
+      idle:'sq-idle-cube 4s ease-in-out infinite', br:'16%',
+      clip:null, size:180,
+      grad: () => 'radial-gradient(circle at 36% 30%,#a8dcff 0%,#1FA9E6 42%,#003d6b 100%)',
+      glow:'rgba(31,169,230,.6)', ring:'rgba(31,169,230,.25)',
+      squishBR: t => `${16+t*12}% ${16-t*4}% ${16+t*12}% ${16-t*4}%`,
+    },
+    blob: {
+      idle:'sq-idle-blob 6s ease-in-out infinite', br:'62% 38% 72% 28%/34% 58% 42% 66%',
+      clip:null, size:190,
+      grad: () => 'radial-gradient(circle at 38% 34%,#d8c0ff 0%,#8A6CFF 42%,#3a1080 100%)',
+      glow:'rgba(138,108,255,.6)', ring:'rgba(138,108,255,.25)',
+      squishBR: () => '55% 45% 65% 35%/38% 62% 38% 62%',
+    },
+    star: {
+      idle:'sq-idle-star 3s ease-in-out infinite', br:'0',
+      clip:'polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)',
+      size:185,
+      grad: () => 'radial-gradient(circle at 40% 35%,#fffaaa 0%,#FFCE00 46%,#8b6000 100%)',
+      glow:'rgba(255,206,0,.65)', ring:'rgba(255,206,0,.3)',
+      squishBR: () => '0',
+    },
+    heart: {
+      idle:'sq-idle-heart 1.6s ease-in-out infinite', br:'0',
+      clip:"path('M 95 35 A 50 50 0 0 1 190 35 A 50 50 0 0 1 285 35 Q 285 115 190 180 Q 95 115 95 35 Z')",
+      size:190,
+      grad: () => 'radial-gradient(circle at 38% 32%,#ffb0cc 0%,#e63946 46%,#6a0018 100%)',
+      glow:'rgba(230,57,70,.6)', ring:'rgba(230,57,70,.3)',
+      squishBR: () => '0',
+    },
+  };
+
+  let shapeId = 'ball';
+
+  function applyShape(id) {
+    const s = SHAPES[id] || SHAPES.ball;
+    shapeId = id;
+    ball.classList.remove('sq-press','sq-bounce');
+    ball.style.cssText = '';
+    const sz = s.size || 190;
+    ball.style.width  = sz + 'px';
+    ball.style.height = sz + 'px';
+    ball.style.borderRadius = s.br;
+    if (s.clip) { ball.style.clipPath = s.clip; ball.style.webkitClipPath = s.clip; }
+    ball.style.animation = s.idle;
+
+    const m = MOODS[moodIdx];
+    ball.style.background = s.grad(m);
+    const gc = s.glow || m.glow, rc = s.ring || m.ring;
+    ball.style.boxShadow = `0 0 0 12px ${gc.replace('.6','.07')},0 0 0 28px ${gc.replace('.6','.03')},0 28px 60px -8px ${gc},inset 0 -18px 28px rgba(0,0,0,.25),inset 0 12px 22px rgba(255,255,255,.18)`;
+    glowEl.style.background = `radial-gradient(ellipse at 50% 60%,${gc.replace('.6','.22')} 0%,transparent 60%)`;
+    document.querySelectorAll('.sq-ring').forEach(r => r.style.borderColor = rc);
+
+    document.querySelectorAll('.sq-s-btn').forEach(b => b.classList.toggle('active', b.dataset.shape === id));
+  }
+
+  /* patch applyMood to respect shape's own palette */
+  const _origApplyMood = applyMood;
+  function applyMoodWithShape(idx) {
+    const s = SHAPES[shapeId];
+    const m = MOODS[idx];
+    if (s && s.glow) {
+      /* shape has own color — only update face/label/ambient, not ball bg */
+      moodEl.textContent = m.name;
+      moodEl.style.color = m.ballMid;
+      moodEl.style.borderColor = m.ballMid + '40';
+      countEl.style.textShadow = `0 4px 20px ${m.ballMid}80`;
+    } else {
+      _origApplyMood(idx);
+    }
+  }
+
+  /* patch animPress to handle clip-path shapes */
+  const _origAnimPress = animPress;
+  function animPressWithShape() {
+    if (!pressing) return;
+    const t = Math.min((performance.now() - pressStart) / 700, 1);
+    const ease = 1 - Math.pow(1 - t, 2.2);
+    const sx = 1 + ease * 0.40, sy = 1 - ease * 0.34;
+    ball.style.transform = `scaleX(${sx.toFixed(3)}) scaleY(${sy.toFixed(3)})`;
+    const s = SHAPES[shapeId];
+    if (s && !s.clip && s.squishBR) {
+      ball.style.borderRadius = s.squishBR(ease);
+    }
+    pressRaf = requestAnimationFrame(animPressWithShape);
+  }
+  animPress = animPressWithShape;
+
+  /* patch endPress bounce for clip-path shapes */
+  const _origEndPress = endPress;
+  function endPressWithShape(e) {
+    if (!pressing) return;
+    pressing = false;
+    cancelAnimationFrame(pressRaf);
+    const held = Math.min((performance.now() - pressStart) / 700, 1);
+    const s = SHAPES[shapeId];
+    ball.style.setProperty('--sx', (1 + held * 0.40).toFixed(2));
+    ball.style.setProperty('--sy', (1 - held * 0.34).toFixed(2));
+    ball.style.transform = '';
+    ball.style.borderRadius = s ? s.br : '50%';
+    if (s && s.clip) { ball.style.clipPath = s.clip; ball.style.webkitClipPath = s.clip; }
+    ball.classList.remove('sq-press');
+    ball.classList.add('sq-bounce');
+
+    count++;
+    const newMood = getMoodIdx(count);
+    if (newMood !== moodIdx) { moodIdx = newMood; applyMoodWithShape(moodIdx); face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop'); }
+    face.textContent = MOODS[moodIdx].face;
+    updateMeter(count);
+    const msgs = MSGS_BY_MOOD[moodIdx];
+    msgEl.textContent = msgs[(count-1) % msgs.length];
+    msgEl.classList.remove('flash'); void msgEl.offsetWidth; msgEl.classList.add('flash');
+    countEl.textContent = count;
+    playPop(held, moodIdx);
+    if (held > 0.6) { wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake'); if(navigator.vibrate) navigator.vibrate(40); }
+    const r = ball.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+    burst(r.left-wr.left+r.width/2, r.top-wr.top+r.height/2, held, moodIdx);
+    if (!celebrated && count >= STRESS_TOTAL) {
+      celebrated = true;
+      setTimeout(() => { playCelebrate(); celebrate.classList.add('show'); if(navigator.vibrate) navigator.vibrate([80,40,80]); setTimeout(() => celebrate.classList.remove('show'), 3500); }, 400);
+    }
+    ball.addEventListener('animationend', () => {
+      ball.classList.remove('sq-bounce');
+      ball.style.transform = '';
+      if (s && s.clip) { ball.style.clipPath = s.clip; ball.style.webkitClipPath = s.clip; }
+      ball.style.borderRadius = s ? s.br : '50%';
+    }, {once:true});
+  }
+
+  /* re-bind with patched handler */
+  ball.removeEventListener('mousedown', startPress);
+  ball.removeEventListener('touchstart', startPress);
+  window.removeEventListener('mouseup', endPress);
+  window.removeEventListener('touchend', endPress);
+  endPress = endPressWithShape;
+  ball.addEventListener('mousedown', startPress);
+  ball.addEventListener('touchstart', startPress, {passive:false});
+  window.addEventListener('mouseup', endPressWithShape);
+  window.addEventListener('touchend', endPressWithShape);
+
+  /* selector click */
+  document.querySelectorAll('.sq-s-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      applyShape(b.dataset.shape);
+      /* small bounce to show the new shape */
+      ball.classList.remove('sq-bounce');
+      void ball.offsetWidth;
+      ball.classList.add('sq-bounce');
+    });
+  });
+
+  /* ===== FIDGET SPINNER ===== */
+  (function() {
+    const spinEl   = document.getElementById('sq-spinner');
+    const tipEl    = document.getElementById('sq-use-tip');
+    const glowEl2  = document.getElementById('sq-spin-glow');
+    if (!spinEl) return;
+
+    const TIPS = {
+      ball:  'Сжимай ритмично — снижает тревогу и напряжение',
+      cube:  'Верти грани куба — каждая сторона разная на ощупь',
+      blob:  'Тяни и мни слизь — расслабляет мышечное напряжение',
+      star:  'Сжимай кончики звезды — сенсорная стимуляция',
+      heart: 'Держи в ладони — успокаивает сердечный ритм',
+    };
+    const COLORS = {
+      ball:'#EC2D8B', cube:'#1FA9E6', blob:'#8A6CFF', star:'#FFCE00', heart:'#e63946',
+    };
+
+    let angle = 0, velocity = 3, raf = null;
+    let pDown = false, lastA = 0, lastT = 0, cx = 0, cy = 0;
+
+    function ang(x, y) { return Math.atan2(y - cy, x - cx) * 180 / Math.PI; }
+    function center() {
+      const r = spinEl.getBoundingClientRect();
+      cx = r.left + r.width / 2; cy = r.top + r.height / 2;
+    }
+    function tick() {
+      if (!pDown) velocity *= 0.984;
+      angle += velocity;
+      spinEl.style.transform = 'rotate(' + angle.toFixed(2) + 'deg)';
+      if (Math.abs(velocity) > 0.05 || pDown) { raf = requestAnimationFrame(tick); }
+      else { velocity = 0; raf = null; }
+    }
+
+    spinEl.addEventListener('mousedown', e => {
+      e.preventDefault(); center();
+      lastA = ang(e.clientX, e.clientY); lastT = performance.now(); pDown = true;
+      spinEl.style.cursor = 'grabbing';
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+    spinEl.addEventListener('touchstart', e => {
+      e.preventDefault(); center();
+      const t = e.touches[0]; lastA = ang(t.clientX, t.clientY);
+      lastT = performance.now(); pDown = true;
+      if (!raf) raf = requestAnimationFrame(tick);
+    }, {passive:false});
+    window.addEventListener('mousemove', e => {
+      if (!pDown) return; e.preventDefault();
+      const now = performance.now(), na = ang(e.clientX, e.clientY);
+      let d = na - lastA; if (d > 180) d -= 360; if (d < -180) d += 360;
+      velocity = d * 16 / Math.max(now - lastT, 1);
+      angle += d; lastA = na; lastT = now;
+    });
+    window.addEventListener('touchmove', e => {
+      if (!pDown) return; e.preventDefault();
+      const t = e.touches[0], now = performance.now(), na = ang(t.clientX, t.clientY);
+      let d = na - lastA; if (d > 180) d -= 360; if (d < -180) d += 360;
+      velocity = d * 16 / Math.max(now - lastT, 1);
+      angle += d; lastA = na; lastT = now;
+    }, {passive:false});
+    window.addEventListener('mouseup',  () => { pDown = false; spinEl.style.cursor = 'grab'; });
+    window.addEventListener('touchend', () => { pDown = false; });
+
+    function updateSpinner(id) {
+      const c = COLORS[id] || COLORS.ball;
+      spinEl.style.color = c;
+      if (glowEl2) glowEl2.style.background = `radial-gradient(circle,${c}30 0%,transparent 70%)`;
+      if (tipEl) {
+        tipEl.style.opacity = '0';
+        setTimeout(() => { tipEl.textContent = TIPS[id] || ''; tipEl.style.opacity = '1'; }, 180);
+      }
+      if (Math.abs(velocity) < 2) { velocity = 5; if (!raf) raf = requestAnimationFrame(tick); }
+    }
+
+    const _applyShape = applyShape;
+    applyShape = function(id) { _applyShape(id); updateSpinner(id); };
+
+    updateSpinner('ball');
+    raf = requestAnimationFrame(tick);
+  })();
+
+  /* apply default shape on open */
+  const origOpen = openGame;
+  // redefine open to also init shape
+  document.getElementById('sqbtn').removeEventListener('click', openGame);
+  function openWithShape() {
+    game.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    applyMood(0);
+    applyShape(shapeId);
+  }
+  document.getElementById('sqbtn').addEventListener('click', openWithShape);
+})();
+
+</script>
+</body>
+</html>

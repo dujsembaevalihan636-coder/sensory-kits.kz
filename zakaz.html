@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Заявка на Sensory Kit — сенсорный бокс для школ и семей</title>
+<meta name="description" content="Оставьте заявку на сенсорный бокс Sensory Kit. Работаем со школами, экстренными службами и семьями детей с ООП в Алматы.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#EC2D8B;--pink-ink:#D81B7C;--pink-wash:#FDE9F3;
+  --blue:#1FA9E6;--blue-ink:#0E86C4;
+  --orange:#F7951E;--green:#7DBE3A;--violet:#8A6CFF;
+  --ink:#1B1726;--bg:#FFFDF9;--card:#fff;
+  --hair:#E8E2EF;--muted:#6E6580;
+  --r:24px;
+  --shadow:0 8px 32px rgba(27,23,38,.1);
+  --shadow-sm:0 2px 12px rgba(27,23,38,.07);
+}
+html{scroll-behavior:smooth;height:100%}
+body{font-family:"Golos Text",sans-serif;color:var(--ink);background:var(--bg);min-height:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit}
+
+/* ──── LAYOUT ──── */
+.page{display:grid;grid-template-columns:420px 1fr;min-height:100vh}
+
+/* ──── LEFT PANEL ──── */
+.panel{
+  background:linear-gradient(160deg,#1B1726 0%,#2a0e3a 55%,#0d1e38 100%);
+  padding:48px 36px;
+  display:flex;flex-direction:column;gap:0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.panel-logo{display:flex;align-items:center;gap:12px;margin-bottom:48px}
+.panel-logo svg{width:44px;height:44px}
+.panel-logo span{font-family:"Unbounded",sans-serif;font-weight:800;font-size:1.1rem;color:#fff;letter-spacing:-.02em}
+.panel-tagline{font-size:1.9rem;font-weight:700;font-family:"Unbounded",sans-serif;line-height:1.18;color:#fff;letter-spacing:-.02em;margin-bottom:16px}
+.panel-tagline em{font-style:normal;color:var(--pink)}
+.panel-sub{font-size:.95rem;color:rgba(255,255,255,.52);line-height:1.6;margin-bottom:36px}
+
+/* kit contents */
+.kit-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:22px 20px;margin-bottom:28px}
+.kit-box-title{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px}
+.kit-items{display:flex;flex-direction:column;gap:9px}
+.kit-item{display:flex;align-items:center;gap:12px;font-size:.9rem;color:rgba(255,255,255,.75)}
+.kit-item .ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-none}
+
+/* stats row */
+.panel-stats{display:flex;gap:14px;margin-bottom:28px}
+.pstat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 12px;text-align:center}
+.pstat b{display:block;font-family:"Unbounded",sans-serif;font-size:1.25rem;font-weight:700;color:#fff}
+.pstat span{font-size:.72rem;color:rgba(255,255,255,.4);line-height:1.3;display:block;margin-top:3px}
+
+/* contacts aside */
+.panel-contacts{margin-top:auto;padding-top:28px;border-top:1px solid rgba(255,255,255,.08)}
+.panel-contacts p{font-size:.8rem;color:rgba(255,255,255,.35);margin-bottom:10px}
+.panel-link{display:flex;align-items:center;gap:9px;font-size:.88rem;color:rgba(255,255,255,.6);margin-bottom:7px;transition:color .2s}
+.panel-link:hover{color:#fff}
+.panel-link svg{width:16px;height:16px;opacity:.55;flex-none}
+
+/* ──── RIGHT: FORM AREA ──── */
+.form-area{padding:52px 60px;display:flex;flex-direction:column;align-items:center}
+.form-area-inner{width:100%;max-width:580px}
+
+/* breadcrumb back */
+.back-link{display:inline-flex;align-items:center;gap:7px;font-size:.88rem;color:var(--muted);font-weight:600;margin-bottom:40px;transition:color .2s}
+.back-link:hover{color:var(--ink)}
+.back-link svg{width:16px;height:16px}
+
+/* step indicator */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:44px}
+.step-dot{display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700;color:var(--muted);transition:color .3s;cursor:default}
+.step-dot .num{width:28px;height:28px;border-radius:50%;border:2px solid var(--hair);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;transition:all .3s;background:var(--card)}
+.step-dot.active{color:var(--ink)}
+.step-dot.active .num{background:var(--pink);border-color:var(--pink);color:#fff}
+.step-dot.done .num{background:var(--green);border-color:var(--green);color:#fff}
+.step-dot.done .num svg{display:block}
+.step-dot .num svg{display:none;width:13px;height:13px}
+.step-sep{flex:1;height:2px;background:var(--hair);margin:0 10px;transition:background .3s}
+.step-sep.done{background:var(--green)}
+
+/* step panel */
+.step-panel{display:none;animation:fadeUp .35s ease both}
+.step-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.step-head{margin-bottom:28px}
+.step-head h2{font-family:"Unbounded",sans-serif;font-size:1.45rem;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.step-head p{color:var(--muted);font-size:.95rem;line-height:1.55}
+
+/* fields */
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.f-full{grid-column:1/-1}
+.fgroup{display:flex;flex-direction:column;gap:6px}
+.fgroup label{font-size:.83rem;font-weight:700;color:var(--ink);letter-spacing:.01em}
+.fgroup label .req{color:var(--pink);margin-left:2px}
+.fgroup label .opt{color:var(--muted);font-weight:400;font-size:.78rem;margin-left:4px}
+.finput{
+  border:1.5px solid var(--hair);border-radius:14px;
+  padding:13px 15px;font-size:.96rem;color:var(--ink);
+  background:var(--card);outline:none;width:100%;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;appearance:none;
+}
+.finput:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,45,139,.1)}
+.finput.err{border-color:#e63946;box-shadow:0 0 0 3px rgba(230,57,70,.08)}
+select.finput{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%236E6580' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;padding-right:36px}
+textarea.finput{resize:vertical;min-height:100px;line-height:1.55}
+.ferr{font-size:.78rem;color:#e63946;display:none;margin-top:2px}
+.fgroup.show-err .ferr{display:block}
+.fgroup.show-err .finput{border-color:#e63946}
+
+/* type cards */
+.type-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.type-card{border:2px solid var(--hair);border-radius:16px;padding:14px 14px 12px;cursor:pointer;transition:border-color .2s,background .2s;text-align:left;background:var(--card);position:relative}
+.type-card:hover{border-color:rgba(236,45,139,.3);background:var(--pink-wash)}
+.type-card.sel{border-color:var(--pink);background:var(--pink-wash)}
+.type-card .tc-ico{font-size:1.4rem;margin-bottom:6px;display:block}
+.type-card .tc-name{font-size:.88rem;font-weight:700;color:var(--ink);line-height:1.3}
+.type-card .tc-sub{font-size:.76rem;color:var(--muted);margin-top:3px;line-height:1.35}
+.type-card input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.type-card .tc-check{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;background:var(--pink);display:none;align-items:center;justify-content:center}
+.type-card .tc-check svg{width:11px;height:11px;stroke:#fff;stroke-width:2.5}
+.type-card.sel .tc-check{display:flex}
+
+/* qty stepper */
+.qty-wrap{display:flex;align-items:center;gap:0;border:1.5px solid var(--hair);border-radius:14px;overflow:hidden;background:var(--card);transition:border-color .2s,box-shadow .2s}
+.qty-wrap:focus-within{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,45,139,.1)}
+.qty-btn{width:44px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--muted);background:none;transition:color .2s,background .2s;flex-none}
+.qty-btn:hover{color:var(--pink);background:var(--pink-wash)}
+.qty-val{flex:1;border:none;outline:none;font-size:1rem;font-weight:700;text-align:center;color:var(--ink);background:transparent;padding:12px 0;font-family:inherit}
+.qty-val::-webkit-inner-spin-button,.qty-val::-webkit-outer-spin-button{-webkit-appearance:none}
+
+/* source chips */
+.source-chips{display:flex;flex-wrap:wrap;gap:8px}
+.src-chip{border:1.5px solid var(--hair);border-radius:999px;padding:7px 14px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);background:var(--card)}
+.src-chip:hover{border-color:rgba(31,169,230,.4);color:var(--blue-ink);background:#E4F4FC}
+.src-chip.sel{border-color:var(--blue);background:#E4F4FC;color:var(--blue-ink)}
+
+/* urgency radio */
+.urgency-row{display:flex;gap:10px;flex-wrap:wrap}
+.urg-opt{border:1.5px solid var(--hair);border-radius:12px;padding:10px 14px;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);background:var(--card);display:flex;align-items:center;gap:7px}
+.urg-opt:hover{border-color:rgba(138,108,255,.3);background:#f3f0ff;color:#5b45d4}
+.urg-opt.sel{border-color:var(--violet);background:#f3f0ff;color:#5b45d4}
+.urg-opt input[type=radio]{display:none}
+.urg-dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.5}
+
+/* nav buttons */
+.step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:32px;gap:14px}
+.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:.92rem;font-weight:700;color:var(--muted);padding:12px 20px;border-radius:12px;transition:color .2s,background .2s}
+.btn-back:hover{color:var(--ink);background:var(--hair)}
+.btn-next{background:var(--pink);color:#fff;padding:14px 32px;border-radius:14px;font-size:1rem;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 6px 20px rgba(236,45,139,.3)}
+.btn-next:hover{background:var(--pink-ink);box-shadow:0 8px 28px rgba(236,45,139,.4);transform:translateY(-1px)}
+.btn-next:active{transform:none}
+.btn-next.loading{pointer-events:none;opacity:.8}
+.btn-next .spin{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite}
+.btn-next.loading .spin{display:block}
+.btn-next.loading .btn-lbl{display:none}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* review box */
+.review-box{background:linear-gradient(135deg,var(--pink-wash),#fff);border:1.5px solid rgba(236,45,139,.15);border-radius:20px;padding:22px 20px;margin-bottom:24px}
+.review-box-title{font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.review-rows{display:flex;flex-direction:column;gap:10px}
+.rrow{display:flex;justify-content:space-between;gap:12px;font-size:.9rem}
+.rrow .rk{color:var(--muted)}
+.rrow .rv{font-weight:600;text-align:right}
+
+/* success */
+.success-screen{display:none;text-align:center;padding:40px 0;animation:fadeUp .4s ease both}
+.success-screen.show{display:block}
+.ok-circle{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#7DBE3A,#4a9a20);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 12px 30px rgba(125,190,58,.3)}
+.ok-circle svg{width:36px;height:36px;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.success-screen h2{font-family:"Unbounded",sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:-.02em;margin-bottom:12px}
+.success-screen p{color:var(--muted);font-size:.98rem;line-height:1.65;max-width:40ch;margin:0 auto 28px}
+.success-screen b{color:var(--ink)}
+.back-home{display:inline-flex;align-items:center;gap:7px;background:var(--ink);color:#fff;padding:13px 26px;border-radius:14px;font-weight:700;font-size:.95rem;transition:background .2s}
+.back-home:hover{background:#2e2848}
+
+/* notice note */
+.form-note{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:6px;line-height:1.45}
+.form-note svg{width:14px;height:14px;stroke:var(--green);stroke-width:2.5;flex-none}
+.form-err{font-size:.84rem;color:#e63946;margin-top:12px;display:none}
+.form-err.show{display:block}
+
+/* mobile */
+@media(max-width:900px){
+  .page{grid-template-columns:1fr}
+  .panel{position:static;height:auto;padding:36px 24px 32px}
+  .panel-tagline{font-size:1.45rem}
+  .form-area{padding:36px 24px}
+  .fields{grid-template-columns:1fr}
+  .f-full{grid-column:1}
+  .type-cards{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .type-cards{grid-template-columns:1fr}
+  .panel-stats{flex-wrap:wrap}
+  .form-area{padding:28px 18px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════ LEFT PANEL ══════════ -->
+<aside class="panel">
+  <div class="panel-logo">
+    <svg viewBox="0 0 240 240" aria-hidden="true">
+      <path d="M20 20L120 20L120 58C120 65 126.4 50 129.2 52C135.6 53 140 62 140 70C140 78 135.6 87 129.2 88C126.4 90 120 75 120 82L120 120L82 120C75 120 90 126.4 88 129.2C87 135.6 78 140 70 140C62 140 53 135.6 52 129.2C50 126.4 65 120 58 120L20 120Z" fill="#EC2D8B"/>
+      <path d="M120 20L220 20L220 120L182 120C175 120 190 126.4 188 129.2C187 135.6 178 140 170 140C162 140 153 135.6 152 129.2C150 126.4 165 120 158 120L120 120L120 82C120 75 113.6 90 110.8 88C104.4 87 100 78 100 70C100 62 104.4 53 110.8 52C113.6 50 120 65 120 58Z" fill="#1FA9E6"/>
+      <path d="M20 120L58 120C65 120 50 113.6 52 110.8C53 104.4 62 100 70 100C78 100 87 104.4 88 110.8C90 113.6 75 120 82 120L120 120L120 158C120 165 126.4 150 129.2 152C135.6 153 140 162 140 170C140 178 135.6 187 129.2 188C126.4 190 120 175 120 182L120 220L20 220Z" fill="#F7951E"/>
+      <path d="M120 120L158 120C165 120 150 113.6 152 110.8C153 104.4 162 100 170 100C178 100 187 104.4 188 110.8C190 113.6 175 120 182 120L220 120L220 220L120 220L120 182C120 175 113.6 190 110.8 188C104.4 187 100 178 100 170C100 162 104.4 153 110.8 152C113.6 150 120 165 120 158Z" fill="#7DBE3A"/>
+    </svg>
+    <span>Sensory Kit</span>
+  </div>
+
+  <p class="panel-tagline">Сенсорный бокс<br>для <em>каждого</em><br>ребёнка</p>
+  <p class="panel-sub">Готовый набор из ~40 инструментов саморегуляции для классов, кабинетов психолога и домашнего использования.</p>
+
+  <div class="panel-stats">
+    <div class="pstat"><b>24 800+</b><span>боксов в мире</span></div>
+    <div class="pstat"><b>25</b><span>школ — план</span></div>
+    <div class="pstat"><b>24 ч</b><span>до ответа</span></div>
+  </div>
+
+  <div class="kit-box">
+    <div class="kit-box-title">Что входит в бокс</div>
+    <div class="kit-items">
+      <div class="kit-item"><span class="ico" style="background:rgba(236,45,139,.15)">🫧</span>Антистресс-сжимялки и сквиши</div>
+      <div class="kit-item"><span class="ico" style="background:rgba(31,169,230,.15)">🌀</span>Фиджет-спиннер и тактильные кольца</div>
+      <div class="kit-item"><span class="ico" style="background:rgba(125,190,58,.15)">🪨</span>Сенсорные камни и текстуры</div>
+      <div class="kit-item"><span class="ico" style="background:rgba(247,149,30,.15)">🎨</span>Кинетический песок / слайм</div>
+      <div class="kit-item"><span class="ico" style="background:rgba(138,108,255,.15)">🫁</span>Карточки дыхательных упражнений</div>
+      <div class="kit-item"><span class="ico" style="background:rgba(255,206,0,.18)">📋</span>Инструкция для педагога</div>
+    </div>
+  </div>
+
+  <div class="panel-contacts">
+    <p>Вопросы и партнёрство</p>
+    <a class="panel-link" href="mailto:sensoryrs@outlook.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l10 7 10-7"/></svg>
+      sensoryrs@outlook.com
+    </a>
+    <a class="panel-link" href="tel:+77770081108">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.6A2 2 0 014.1 2h3a2 2 0 012 1.7 12.8 12.8 0 00.7 2.8 2 2 0 01-.4 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5 12.8 12.8 0 002.8.7A2 2 0 0122 16.9z"/></svg>
+      +7 777 008-11-08
+    </a>
+  </div>
+</aside>
+
+<!-- ══════════ RIGHT: FORM ══════════ -->
+<main class="form-area">
+  <div class="form-area-inner">
+
+    <a class="back-link" href="sensory-kit.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Вернуться на главную
+    </a>
+
+    <!-- STEP INDICATOR -->
+    <div class="steps" id="steps">
+      <div class="step-dot active" data-step="1">
+        <div class="num">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          1
+        </div>
+        О вас
+      </div>
+      <div class="step-sep" id="sep-1"></div>
+      <div class="step-dot" data-step="2">
+        <div class="num">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          2
+        </div>
+        Детали
+      </div>
+      <div class="step-sep" id="sep-2"></div>
+      <div class="step-dot" data-step="3">
+        <div class="num">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          3
+        </div>
+        Контакты
+      </div>
+      <div class="step-sep" id="sep-3"></div>
+      <div class="step-dot" data-step="4">
+        <div class="num">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          4
+        </div>
+        Готово
+      </div>
+    </div>
+
+    <!-- ── STEP 1: О ВАС ── -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-head">
+        <h2>Кто вы?</h2>
+        <p>Выберите тип организации и расскажите о себе — это поможет нам подготовить подходящее предложение.</p>
+      </div>
+
+      <div class="fgroup f-full" style="margin-bottom:20px">
+        <label>Тип организации <span class="req">*</span></label>
+        <div class="type-cards" id="type-cards">
+          <label class="type-card sel">
+            <input type="radio" name="org-type" value="Государственная школа" checked>
+            <span class="tc-ico">🏫</span>
+            <span class="tc-name">Государственная школа</span>
+            <span class="tc-sub">Классы, кабинет психолога</span>
+            <span class="tc-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg></span>
+          </label>
+          <label class="type-card">
+            <input type="radio" name="org-type" value="Частная школа">
+            <span class="tc-ico">🎓</span>
+            <span class="tc-name">Частная школа</span>
+            <span class="tc-sub">Инклюзивное образование</span>
+            <span class="tc-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg></span>
+          </label>
+          <label class="type-card">
+            <input type="radio" name="org-type" value="Экстренная служба (МЧС / пожарные / полиция)">
+            <span class="tc-ico">🚒</span>
+            <span class="tc-name">МЧС / служба</span>
+            <span class="tc-sub">Помощь детям при ЧС</span>
+            <span class="tc-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg></span>
+          </label>
+          <label class="type-card">
+            <input type="radio" name="org-type" value="Семья ребёнка с ООП">
+            <span class="tc-ico">🏠</span>
+            <span class="tc-name">Семья с ребёнком ООП</span>
+            <span class="tc-sub">Домашний набор</span>
+            <span class="tc-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3.5 3.5L12 3"/></svg></span>
+          </label>
+        </div>
+        <div class="ferr" id="err-type">Пожалуйста, выберите тип организации</div>
+      </div>
+
+      <div class="fields">
+        <div class="fgroup f-full">
+          <label for="f-name">Ваше имя и фамилия <span class="req">*</span></label>
+          <input class="finput" id="f-name" type="text" placeholder="Например: Айгерим Сейткали" autocomplete="name">
+          <span class="ferr">Введите ваше имя</span>
+        </div>
+        <div class="fgroup">
+          <label for="f-org">Название организации <span class="opt">(необяз.)</span></label>
+          <input class="finput" id="f-org" type="text" placeholder="Школа №15, ДГПБ...">
+        </div>
+        <div class="fgroup">
+          <label for="f-role">Ваша роль <span class="opt">(необяз.)</span></label>
+          <input class="finput" id="f-role" type="text" placeholder="Директор, психолог, учитель...">
+        </div>
+        <div class="fgroup">
+          <label for="f-city">Город <span class="req">*</span></label>
+          <select class="finput" id="f-city">
+            <option value="" disabled selected>Выберите...</option>
+            <option>Алматы</option>
+            <option>Астана</option>
+            <option>Шымкент</option>
+            <option>Другой город Казахстана</option>
+          </select>
+          <span class="ferr">Укажите город</span>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <span></span>
+        <button class="btn-next" id="next-1"><span class="btn-lbl">Далее →</span><span class="spin"></span></button>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: ДЕТАЛИ ── -->
+    <div class="step-panel" id="step-2">
+      <div class="step-head">
+        <h2>Детали заказа</h2>
+        <p>Укажите количество боксов и желаемые сроки — постараемся подстроиться под ваш график.</p>
+      </div>
+
+      <div class="fields">
+        <div class="fgroup f-full">
+          <label>Количество боксов <span class="req">*</span></label>
+          <div class="qty-wrap">
+            <button class="qty-btn" id="qty-minus" type="button" aria-label="Меньше">−</button>
+            <input class="qty-val finput" id="f-qty" type="number" min="1" max="500" value="1">
+            <button class="qty-btn" id="qty-plus" type="button" aria-label="Больше">+</button>
+          </div>
+          <span class="ferr" id="err-qty">Укажите количество (от 1)</span>
+        </div>
+
+        <div class="fgroup f-full">
+          <label>Срочность <span class="opt">(необяз.)</span></label>
+          <div class="urgency-row">
+            <label class="urg-opt sel" data-val="Как можно скорее">
+              <input type="radio" name="urgency" value="Как можно скорее" checked>
+              <span class="urg-dot"></span>Как можно скорее
+            </label>
+            <label class="urg-opt" data-val="В течение месяца">
+              <input type="radio" name="urgency" value="В течение месяца">
+              <span class="urg-dot"></span>В течение месяца
+            </label>
+            <label class="urg-opt" data-val="К учебному году">
+              <input type="radio" name="urgency" value="К учебному году">
+              <span class="urg-dot"></span>К учебному году
+            </label>
+            <label class="urg-opt" data-val="Пока только смотрю">
+              <input type="radio" name="urgency" value="Пока только смотрю">
+              <span class="urg-dot"></span>Пока только смотрю
+            </label>
+          </div>
+        </div>
+
+        <div class="fgroup f-full">
+          <label>Как узнали о нас? <span class="opt">(необяз.)</span></label>
+          <div class="source-chips" id="source-chips">
+            <span class="src-chip" data-val="Соцсети (Instagram / TikTok)">Instagram / TikTok</span>
+            <span class="src-chip" data-val="Сарафанное радио">Сарафанное радио</span>
+            <span class="src-chip" data-val="Коллега / директор">Коллега / директор</span>
+            <span class="src-chip" data-val="Стенд или мероприятие">Стенд / мероприятие</span>
+            <span class="src-chip" data-val="Поиск в Google">Google</span>
+            <span class="src-chip" data-val="Другое">Другое</span>
+          </div>
+        </div>
+
+        <div class="fgroup f-full">
+          <label for="f-needs">Особые требования или вопросы <span class="opt">(необяз.)</span></label>
+          <textarea class="finput" id="f-needs" placeholder="Нужен тренинг для педагогов? Нужна адаптация под специфику службы? Задайте любой вопрос..."></textarea>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" id="back-2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Назад
+        </button>
+        <button class="btn-next" id="next-2"><span class="btn-lbl">Далее →</span><span class="spin"></span></button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: КОНТАКТЫ ── -->
+    <div class="step-panel" id="step-3">
+      <div class="step-head">
+        <h2>Как с вами связаться?</h2>
+        <p>Укажите номер для WhatsApp или Telegram — напишем в течение 24 часов.</p>
+      </div>
+
+      <div class="fields">
+        <div class="fgroup">
+          <label for="f-phone">Телефон / WhatsApp <span class="req">*</span></label>
+          <input class="finput" id="f-phone" type="tel" placeholder="+7 700 000 00 00" autocomplete="tel">
+          <span class="ferr">Введите номер телефона</span>
+        </div>
+        <div class="fgroup">
+          <label for="f-email">Email <span class="opt">(необяз.)</span></label>
+          <input class="finput" id="f-email" type="email" placeholder="you@school.kz" autocomplete="email">
+          <span class="ferr">Проверьте формат email</span>
+        </div>
+        <div class="fgroup f-full">
+          <label for="f-tg">Telegram <span class="opt">(необяз.)</span></label>
+          <input class="finput" id="f-tg" type="text" placeholder="@username">
+        </div>
+
+        <div class="fgroup f-full" style="margin-top:8px">
+          <div class="review-box">
+            <div class="review-box-title">Проверьте заявку</div>
+            <div class="review-rows" id="review-rows">
+              <!-- filled by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Данные отправляются только в Telegram команды Sensory Kit — никакой рекламы
+      </div>
+      <div class="form-err" id="form-err">Что-то пошло не так. Напишите нам напрямую: sensoryrs@outlook.com</div>
+
+      <div class="step-nav">
+        <button class="btn-back" id="back-3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Назад
+        </button>
+        <button class="btn-next" id="submit-btn"><span class="btn-lbl">Отправить заявку →</span><span class="spin"></span></button>
+      </div>
+    </div>
+
+    <!-- ── SUCCESS ── -->
+    <div class="success-screen" id="success-screen">
+      <div class="ok-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h2>Заявка отправлена!</h2>
+      <p>Спасибо! Мы получили вашу заявку и свяжемся с вами в течение <b>24 часов</b> по указанному номеру.<br><br>Если срочно — пишите напрямую: <b>sensoryrs@outlook.com</b></p>
+      <a class="back-home" href="sensory-kit.html">← На главную</a>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<script>
+/* ── DATA ── */
+const DATA = {
+  type: 'Государственная школа',
+  name: '', org: '', role: '', city: '',
+  qty: 1, urgency: 'Как можно скорее', source: '', needs: '',
+  phone: '', email: '', tg: '',
+};
+
+const TG_TOKEN = '8256696953:AAH9r1gRSiNKwL-p6kNJIWKZ1y2rUtIDMNQ';
+const TG_CHAT_ID = '926811016';
+
+/* ── STEP CONTROL ── */
+let cur = 1;
+function goTo(n) {
+  document.getElementById('step-' + cur).classList.remove('active');
+  document.querySelectorAll('.step-dot').forEach(d => {
+    const s = +d.dataset.step;
+    d.classList.remove('active','done');
+    if (s < n) d.classList.add('done');
+    if (s === n) d.classList.add('active');
+  });
+  ['sep-1','sep-2','sep-3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('done', i + 1 < n);
+  });
+  cur = n;
+  const panel = document.getElementById('step-' + n);
+  if (panel) { panel.classList.add('active'); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ── TYPE CARDS ── */
+document.querySelectorAll('.type-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('sel'));
+    card.classList.add('sel');
+    DATA.type = card.querySelector('input').value;
+  });
+});
+
+/* ── QTY STEPPER ── */
+const qtyInput = document.getElementById('f-qty');
+document.getElementById('qty-minus').addEventListener('click', () => {
+  const v = Math.max(1, parseInt(qtyInput.value || 1) - 1);
+  qtyInput.value = v; DATA.qty = v;
+});
+document.getElementById('qty-plus').addEventListener('click', () => {
+  const v = Math.min(500, parseInt(qtyInput.value || 1) + 1);
+  qtyInput.value = v; DATA.qty = v;
+});
+qtyInput.addEventListener('input', () => { DATA.qty = parseInt(qtyInput.value) || 1; });
+
+/* ── URGENCY ── */
+document.querySelectorAll('.urg-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.urg-opt').forEach(o => o.classList.remove('sel'));
+    opt.classList.add('sel');
+    DATA.urgency = opt.dataset.val;
+  });
+});
+
+/* ── SOURCE CHIPS ── */
+document.querySelectorAll('.src-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    chip.classList.toggle('sel');
+    DATA.source = Array.from(document.querySelectorAll('.src-chip.sel')).map(c => c.dataset.val).join(', ');
+  });
+});
+
+/* ── VALIDATION HELPERS ── */
+function req(id, errId) {
+  const el = document.getElementById(id);
+  const val = el ? el.value.trim() : '';
+  const grp = el ? el.closest('.fgroup') : null;
+  if (!val) { if(grp) grp.classList.add('show-err'); return false; }
+  if(grp) grp.classList.remove('show-err');
+  return true;
+}
+
+/* ── STEP 1 NEXT ── */
+document.getElementById('next-1').addEventListener('click', () => {
+  let ok = true;
+  ok = req('f-name', 'err-name') && ok;
+  ok = req('f-city', 'err-city') && ok;
+  if (!ok) return;
+  DATA.name = document.getElementById('f-name').value.trim();
+  DATA.org  = document.getElementById('f-org').value.trim();
+  DATA.role = document.getElementById('f-role').value.trim();
+  DATA.city = document.getElementById('f-city').value;
+  goTo(2);
+});
+
+/* ── STEP 2 BACK/NEXT ── */
+document.getElementById('back-2').addEventListener('click', () => goTo(1));
+document.getElementById('next-2').addEventListener('click', () => {
+  const q = parseInt(qtyInput.value);
+  const qErr = document.getElementById('err-qty');
+  if (!q || q < 1) {
+    if(qErr) { qErr.style.display = 'block'; } return;
+  }
+  if(qErr) qErr.style.display = '';
+  DATA.qty   = q;
+  DATA.needs = document.getElementById('f-needs').value.trim();
+  fillReview();
+  goTo(3);
+});
+
+/* ── REVIEW FILL ── */
+function fillReview() {
+  const rows = [
+    ['Тип', DATA.type],
+    ['Имя', DATA.name],
+    DATA.org ? ['Организация', DATA.org] : null,
+    DATA.role ? ['Роль', DATA.role] : null,
+    ['Город', DATA.city],
+    ['Количество боксов', DATA.qty + ' шт.'],
+    ['Срочность', DATA.urgency],
+    DATA.source ? ['Откуда узнали', DATA.source] : null,
+  ].filter(Boolean);
+  document.getElementById('review-rows').innerHTML = rows.map(([k,v]) =>
+    `<div class="rrow"><span class="rk">${k}</span><span class="rv">${v}</span></div>`
+  ).join('');
+}
+
+/* ── STEP 3 BACK/SUBMIT ── */
+document.getElementById('back-3').addEventListener('click', () => goTo(2));
+document.getElementById('submit-btn').addEventListener('click', async () => {
+  let ok = true;
+  ok = req('f-phone') && ok;
+  const emailEl = document.getElementById('f-email');
+  if (emailEl.value.trim() && !emailEl.value.includes('@')) {
+    emailEl.closest('.fgroup').classList.add('show-err'); ok = false;
+  } else {
+    emailEl.closest('.fgroup').classList.remove('show-err');
+  }
+  if (!ok) return;
+
+  DATA.phone = document.getElementById('f-phone').value.trim();
+  DATA.email = emailEl.value.trim();
+  DATA.tg    = document.getElementById('f-tg').value.trim();
+
+  const btn = document.getElementById('submit-btn');
+  btn.classList.add('loading');
+
+  const lines = [
+    `📦 <b>Новая заявка на бокс — сайт</b>`,
+    ``,
+    `👤 <b>Имя:</b> ${DATA.name}`,
+    `🏢 <b>Тип:</b> ${DATA.type}`,
+    DATA.org  ? `🏫 <b>Организация:</b> ${DATA.org}` : null,
+    DATA.role ? `🎯 <b>Роль:</b> ${DATA.role}` : null,
+    `📍 <b>Город:</b> ${DATA.city}`,
+    ``,
+    `📦 <b>Количество боксов:</b> ${DATA.qty} шт.`,
+    `⏱ <b>Срочность:</b> ${DATA.urgency}`,
+    DATA.source ? `📣 <b>Откуда:</b> ${DATA.source}` : null,
+    DATA.needs  ? `💬 <b>Требования:</b> ${DATA.needs}` : null,
+    ``,
+    `📞 <b>Телефон:</b> ${DATA.phone}`,
+    DATA.email ? `✉️ <b>Email:</b> ${DATA.email}` : null,
+    DATA.tg    ? `💬 <b>Telegram:</b> ${DATA.tg}` : null,
+  ].filter(v => v !== null).join('\n');
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: TG_CHAT_ID, text: lines, parse_mode: 'HTML'}),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.description);
+    goTo(4);
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('success-screen').classList.add('show');
+    document.querySelectorAll('.step-dot').forEach(d => d.classList.add('done'));
+    ['sep-1','sep-2','sep-3'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.classList.add('done');
+    });
+  } catch(e) {
+    const errEl = document.getElementById('form-err');
+    errEl.textContent = 'Ошибка отправки. Напишите напрямую: sensoryrs@outlook.com';
+    errEl.classList.add('show');
+  } finally {
+    btn.classList.remove('loading');
+  }
+});
+
+/* ── LIVE INPUT CLEAN ── */
+['f-name','f-city','f-phone'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => el.closest('.fgroup') && el.closest('.fgroup').classList.remove('show-err'));
+});
+</script>
+</body>
+</html>
