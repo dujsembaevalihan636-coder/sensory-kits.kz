@@ -1,0 +1,28 @@
+{
+  "name": "Sensory Kit — сенсорные боксы",
+  "short_name": "Sensory Kit",
+  "description": "Сенсорные боксы для школ, МЧС и семей. Алматы.",
+  "start_url": "/sensory-kits.kz/sensory-kit.html",
+  "scope": "/sensory-kits.kz/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FFFDF9",
+  "theme_color": "#EC2D8B",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "health", "social"],
+  "screenshots": []
+}
