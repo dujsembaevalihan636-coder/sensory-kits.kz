@@ -305,6 +305,23 @@ img{max-width:100%;display:block}
   .reveal{opacity:1;transform:none}.item{opacity:1!important}
 }
 
+/* антистрессы подробно */
+.sq-detail-grid{display:flex;flex-direction:column;gap:20px;margin-top:32px}
+.sq-detail-card{display:grid;grid-template-columns:120px 1fr;gap:28px;align-items:center;background:var(--card);border:1.5px solid var(--hair);border-radius:24px;padding:28px;box-shadow:var(--shadow-sm);transition:box-shadow .25s,transform .25s}
+.sq-detail-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.sq-d-shape{width:90px;height:90px;flex:none;transition:transform .3s}
+.sq-detail-card:hover .sq-d-shape{transform:scale(1.08)}
+.sq-d-tag{font-size:.73rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.sq-d-info h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.sq-d-info p{font-size:.92rem;line-height:1.6;color:var(--muted);margin-bottom:12px}
+.sq-d-tips{display:flex;flex-wrap:wrap;gap:7px}
+.sq-d-tips span{background:var(--pink-wash);color:var(--pink-ink);font-size:.75rem;font-weight:700;padding:5px 11px;border-radius:999px}
+@media(max-width:600px){
+  .sq-detail-card{grid-template-columns:1fr;text-align:center}
+  .sq-d-shape{margin:0 auto}
+  .sq-d-tips{justify-content:center}
+}
+
 </style>
 </head>
 <body id="top">
@@ -405,6 +422,69 @@ img{max-width:100%;display:block}
       <article class="item k-green"><div class="pic"><svg viewBox="0 0 100 100"><g fill="none" stroke-width="8" stroke-linecap="round"><ellipse cx="50" cy="36" rx="27" ry="9" stroke="#7DBE3A"/><ellipse cx="50" cy="52" rx="27" ry="9" stroke="#EC2D8B"/><ellipse cx="50" cy="68" rx="27" ry="9" stroke="#1FA9E6"/></g></svg></div><span class="qty">×9</span><h3>Сенсорные кольца</h3><p>Тактильные кольца для самостимуляции и мягкого расслабления.</p></article>
       <article class="item k-blue"><div class="pic"><svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="24" fill="#19B6C9"/><ellipse cx="42" cy="44" rx="8" ry="5" fill="#7fe0ea" opacity=".8"/></svg></div><span class="qty">×3</span><h3>Стресс-мяч / сквиш</h3><p>Сжатие расслабляет мышцы и помогает справиться с тревогой.</p></article>
       <article class="item k-violet"><div class="pic"><svg viewBox="0 0 100 100"><path d="M18 38 L34 38 L34 54 L50 54 L50 38 L66 38 L66 60 L82 60" fill="none" stroke="#8A6CFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="34" cy="46" r="3" fill="#fff"/><circle cx="50" cy="46" r="3" fill="#fff"/><circle cx="66" cy="49" r="3" fill="#fff"/></svg></div><span class="qty">×3</span><h3>Змейка-конструктор</h3><p>Повторяющиеся движения успокаивают и развивают мелкую моторику.</p></article>
+    </div>
+
+    <!-- АНТИСТРЕССЫ — расширенный блок -->
+    <div style="margin-top:64px" class="reveal">
+      <span class="eyebrow">Антистрессы подробно</span>
+      <h2 style="font-size:1.6rem;font-weight:700;margin:10px 0 6px;letter-spacing:-.02em">Виды антистрессов в боксе</h2>
+      <p style="color:var(--muted);font-size:.97rem;max-width:56ch">Каждый тип воздействует на нервную систему по-своему — ребёнок инстинктивно выберет нужный.</p>
+    </div>
+    <div class="sq-detail-grid reveal">
+      <div class="sq-detail-card">
+        <div class="sq-d-shape" style="background:radial-gradient(circle at 36% 32%,#ffc0d8,#EC2D8B 50%,#6a0030);border-radius:50%"></div>
+        <div class="sq-d-info">
+          <span class="sq-d-tag">Тактильный · Тревога</span>
+          <h3>Шарик-сквиш</h3>
+          <p>Классический антистресс из медленно восстанавливающейся пены. Сжатие активирует проприоцептивные рецепторы и снижает кортизол. Подходит при панических атаках и острой тревоге.</p>
+          <div class="sq-d-tips"><span>Сожми и держи 5 сек</span><span>Подбрасывай в воздух</span><span>Перекатывай по ладони</span></div>
+        </div>
+      </div>
+      <div class="sq-detail-card">
+        <div class="sq-d-shape" style="background:radial-gradient(circle at 36% 32%,#ffe8a8,#F7951E 50%,#7a3d00);border-radius:50% 50% 50% 50%/60% 60% 40% 40%"></div>
+        <div class="sq-d-info">
+          <span class="sq-d-tag">Проприоцептивный · Сосредоточенность</span>
+          <h3>Яйцо-антистресс</h3>
+          <p>Необычная форма яйца создаёт дополнительный сенсорный интерес. Асимметричность заставляет мозг чуть сильнее фокусироваться, что помогает при отвлечении и рассеянности.</p>
+          <div class="sq-d-tips"><span>Перекати из руки в руку</span><span>Балансируй на одном конце</span><span>Сожми под столом незаметно</span></div>
+        </div>
+      </div>
+      <div class="sq-detail-card">
+        <div class="sq-d-shape" style="background:radial-gradient(circle at 38% 34%,#d8c0ff,#8A6CFF 42%,#3a1080);border-radius:62% 38% 72% 28%/34% 58% 42% 66%"></div>
+        <div class="sq-d-info">
+          <span class="sq-d-tag">Тактильный · Сенсорный поиск</span>
+          <h3>Слизь-антистресс (блоб)</h3>
+          <p>Неправильная форма органического «блоба» никогда не надоедает — каждое сжатие даёт разный результат. Особенно эффективна для детей с сенсорным голодом и РАС.</p>
+          <div class="sq-d-tips"><span>Вытяни и отпусти</span><span>Мни двумя руками сразу</span><span>Наблюдай как принимает форму</span></div>
+        </div>
+      </div>
+      <div class="sq-detail-card">
+        <div class="sq-d-shape" style="background:radial-gradient(circle at 40% 35%,#fffaaa,#FFCE00 46%,#8b6000);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"></div>
+        <div class="sq-d-info">
+          <span class="sq-d-tag">Тактильный · Энергия</span>
+          <h3>Звезда-сквиш</h3>
+          <p>Острые «лучи» дают дополнительную тактильную стимуляцию при сжатии. Подходит для детей с высокой активностью — форма требует чуть больше усилий и «занимает» руки надолго.</p>
+          <div class="sq-d-tips"><span>Сожми все лучи сразу</span><span>Растяни один луч</span><span>Крути в пальцах</span></div>
+        </div>
+      </div>
+      <div class="sq-detail-card">
+        <div class="sq-d-shape" style="background:radial-gradient(circle at 38% 32%,#ffb0cc,#e63946 46%,#6a0018);clip-path:path('M 40 17 A 28 28 0 0 1 96 17 A 28 28 0 0 1 152 17 Q 152 65 96 96 Q 40 65 40 17 Z')"></div>
+        <div class="sq-d-info">
+          <span class="sq-d-tag">Эмоциональный · Связь</span>
+          <h3>Сердечко-антистресс</h3>
+          <p>Форма сердца несёт символическое значение — тепло и принятие. Хорошо работает с детьми, у которых тревога связана с одиночеством или страхом отвержения. Мягкое сжатие = самообъятие.</p>
+          <div class="sq-d-tips"><span>Держи обеими ладонями</span><span>Прижми к груди на выдохе</span><span>Подари другу — покажи заботу</span></div>
+        </div>
+      </div>
+      <div class="sq-detail-card">
+        <div class="sq-d-shape" style="background:radial-gradient(circle at 36% 32%,#c8f5a0,#7DBE3A 50%,#2d5a10);border-radius:50% 50% 30% 70%/50% 50% 70% 50%"></div>
+        <div class="sq-d-info">
+          <span class="sq-d-tag">Тактильный · Визуальный</span>
+          <h3>Мялка-капля</h3>
+          <p>Асимметричная форма капли создаёт интересный визуальный и тактильный опыт. Медленное «вытекание» формы при слабом сжатии успокаивает и помогает замедлить дыхание.</p>
+          <div class="sq-d-tips"><span>Медленно сжимай снизу</span><span>Следи как форма меняется</span><span>Подбрось и поймай</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="real-foot reveal">

@@ -62,13 +62,13 @@ img{max-width:100%;display:block}
 
 /* nav */
 .nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(160%) blur(12px);background:rgba(255,253,249,.82);border-bottom:1px solid var(--hair)}
-.nav-in{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:20px}
-.brand-mark{display:flex;align-items:center;gap:11px;font-family:"Unbounded";font-weight:700;font-size:1.05rem}
-.brand-mark svg{width:34px;height:34px;flex:none}
-.nav-links{display:flex;gap:22px;margin-left:auto;align-items:center}
-.nav-links a{font-weight:600;font-size:.93rem;color:var(--muted);transition:color .2s}
-.nav-links a:hover{color:var(--ink)}
-.nav .btn{padding:10px 18px}
+.nav-in{position:relative;max-width:var(--maxw);margin:0 auto;padding:11px 24px;display:flex;align-items:center;gap:14px}
+.brand-mark{display:flex;align-items:center;gap:9px;font-family:"Unbounded";font-weight:700;font-size:.98rem;white-space:nowrap}
+.brand-mark svg{width:30px;height:30px;flex:none}
+.nav-links{display:flex;gap:4px;margin-left:auto;align-items:center;flex-wrap:nowrap}
+.nav-links a:not(.btn){font-weight:600;font-size:.82rem;color:var(--muted);transition:color .2s;padding:6px 9px;border-radius:8px;white-space:nowrap}
+.nav-links a:not(.btn):hover{color:var(--ink);background:var(--hair)}
+.nav .btn{padding:9px 16px;font-size:.82rem}
 .burger{display:none;margin-left:auto;background:none;border:0;cursor:pointer;padding:6px}
 .burger span{display:block;width:24px;height:2.5px;background:var(--ink);border-radius:2px;margin:5px 0;transition:.25s}
 
@@ -287,8 +287,7 @@ img{max-width:100%;display:block}
 .member .role{color:var(--muted);font-size:.9rem;margin-bottom:14px}
 .member a{display:block;font-weight:600;font-size:.95rem;margin-top:5px}
 .member a:hover{color:var(--pink-ink)}
-.cont-foot{text-align:center;background:var(--pink-wash);border-radius:24px;padding:38px 24px}
-.cont-foot p{color:var(--pink-ink);font-weight:600;margin-bottom:18px}
+.cont-foot{text-align:center;padding:12px 0 8px}
 .cont-foot .pk{font-weight:700}
 
 /* about */
@@ -344,16 +343,21 @@ img{max-width:100%;display:block}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
 .reveal.in{opacity:1;transform:none}
 
+@media(max-width:1080px){
+  .nav-links a:not(.btn){display:none}
+  .nav-links a:not(.btn).nav-show{display:flex}
+  .burger{display:block}
+  .nav-links.open{display:flex!important;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--bg);padding:18px 24px;gap:0;border-bottom:1px solid var(--hair);box-shadow:var(--shadow)}
+  .nav-links.open a{display:flex!important;color:var(--ink);padding:13px 6px;border-radius:0;border-bottom:1px solid var(--hair);font-size:.95rem}
+  .nav-links.open a:last-child{border-bottom:none;margin-top:10px;justify-content:center}
+  .nav-links:not(.open) .btn{display:flex}
+}
 @media(max-width:920px){
   .hero-in,.train,.real-in{grid-template-columns:1fr}
   .art{order:-1;min-height:300px}
   .seg-grid,.team,.proof-row,.reviews-grid,.photo-grid,.about-intro,.event-grid{grid-template-columns:1fr}
   .feat-grid,.dlist{grid-template-columns:1fr}
   .item-grid{grid-template-columns:repeat(2,1fr)}
-  .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--bg);padding:18px 24px;gap:16px;border-bottom:1px solid var(--hair);box-shadow:var(--shadow)}
-  .nav-links.open a{color:var(--ink)}
-  .burger{display:block}
   .section{padding:70px 0}
   .train .cta-col{align-items:stretch}
 }
@@ -365,36 +369,7 @@ img{max-width:100%;display:block}
 }
 
 /* ======== ORDER FORM ======== */
-.order-form-wrap{background:var(--card);border:1px solid var(--hair);border-radius:28px;padding:40px clamp(22px,4vw,52px);box-shadow:var(--shadow);margin:40px 0 0;transition:background .3s,border-color .3s}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
-.form-group{display:flex;flex-direction:column;gap:6px}
-.form-group.full{grid-column:1/-1}
-.form-group label{font-weight:600;font-size:.92rem;color:var(--ink)}
-.form-group label .req{color:var(--pink)}
-.form-input{border:1.5px solid var(--hair);border-radius:12px;padding:13px 16px;font-size:.96rem;font-family:"Golos Text",sans-serif;color:var(--ink);background:var(--bg);transition:border-color .2s,box-shadow .2s;outline:none;width:100%;box-sizing:border-box}
-.form-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,45,139,.11)}
-.form-input::placeholder{color:var(--muted)}
-select.form-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235E586B' stroke-width='2.2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px;padding-right:42px;cursor:pointer}
-textarea.form-input{resize:vertical;min-height:96px;line-height:1.5}
-.form-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:8px;flex-wrap:wrap}
-.form-note{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
-.form-note svg{flex:none;width:16px;height:16px;stroke:var(--green);stroke-width:2}
-.form-submit-btn{background:var(--pink);color:#fff;border:none;border-radius:999px;padding:15px 32px;font-family:"Golos Text",sans-serif;font-weight:700;font-size:1rem;cursor:pointer;display:inline-flex;align-items:center;gap:9px;box-shadow:0 10px 24px -10px var(--pink);transition:transform .18s,box-shadow .18s,opacity .2s;white-space:nowrap}
-.form-submit-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -10px var(--pink)}
-.form-submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.form-submit-btn .spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:form-spin .7s linear infinite;display:none}
-.form-submit-btn.loading .spin{display:block}
-.form-submit-btn.loading .btn-text{display:none}
-@keyframes form-spin{to{transform:rotate(360deg)}}
-.form-success-box{display:none;text-align:center;padding:48px 24px}
-.form-success-box.show{display:block;animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
-.form-success-box .ok-ring{width:80px;height:80px;background:linear-gradient(135deg,var(--green),#5aa025);border-radius:50%;margin:0 auto 22px;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(125,190,58,.55)}
-.form-success-box .ok-ring svg{width:38px;height:38px;stroke:#fff;stroke-width:3}
-.form-success-box h3{font-size:1.5rem;font-weight:700;margin-bottom:8px}
-.form-success-box p{color:var(--muted);max-width:36ch;margin:0 auto}
-.form-error-msg{color:#e63946;font-size:.88rem;font-weight:600;margin-top:10px;display:none}
-.form-error-msg.show{display:block}
-@media(max-width:600px){.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:1}.form-footer{flex-direction:column;align-items:stretch}.form-submit-btn{justify-content:center}}
+@keyframes form-spin{to{transform:rotate(360deg)}}.form-error-msg.show{display:block}
 
 /* ======== FIDGET SPINNER ======== */
 #sq-game-main{display:flex;align-items:center;gap:28px;justify-content:center}
@@ -503,7 +478,6 @@ body.dark .m-pink .tagrow span{background:rgba(236,45,139,.15);color:var(--pink)
 body.dark .m-blue .tagrow span{background:rgba(31,169,230,.12);color:var(--blue)}
 body.dark .m-green .tagrow span{background:rgba(125,190,58,.12);color:var(--green)}
 /* form */
-body.dark .order-form-wrap{background:#18132a;border-color:#2a2240}
 body.dark .form-input{background:#0e0b16;border-color:#2a2240;color:var(--ink)}
 body.dark .form-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,45,139,.15)}
 /* scale steps */
@@ -624,13 +598,13 @@ body.dark .scale-step{background:rgba(255,255,255,.04)}
 .sq-s-preview{width:30px;height:30px;flex:none;transition:transform .2s}
 .sq-s-btn:hover .sq-s-preview{transform:scale(1.15)}
 .sq-s-ball{border-radius:50%;background:radial-gradient(circle at 36% 32%,#ffc0d8,#EC2D8B 46%,#6a0030)}
-.sq-s-cube{border-radius:5px;background:radial-gradient(circle at 36% 32%,#a8dcff,#1FA9E6 46%,#003d6b)}
+.sq-s-egg{border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 36% 32%,#a8f0c0,#7DBE3A 46%,#2d5a10)}
 .sq-s-blob{border-radius:62% 38% 72% 28%/34% 58% 42% 66%;background:radial-gradient(circle at 38% 34%,#d8c0ff,#8A6CFF 42%,#3a1080)}
 .sq-s-star{clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);background:radial-gradient(circle at 40% 35%,#fffaaa,#FFCE00 46%,#8b6000)}
 .sq-s-heart{clip-path:path('M 15 8 A 8 8 0 0 1 30 8 A 8 8 0 0 1 45 8 Q 45 20 30 30 Q 15 20 15 8 Z');background:radial-gradient(circle at 38% 32%,#ffb0cc,#e63946 46%,#6a0018)}
 
 /* shape-specific idle animations */
-@keyframes sq-idle-cube{0%,100%{border-radius:16%;transform:scale(1) rotate(0deg)}30%{border-radius:18% 14% 18% 14%;transform:scale(1.02) rotate(1.5deg)}65%{border-radius:14% 18% 14% 18%;transform:scale(0.99) rotate(-1deg)}}
+@keyframes sq-idle-egg{0%,100%{border-radius:50% 50% 50% 50%/60% 60% 40% 40%;transform:scale(1)}40%{border-radius:48% 52% 52% 48%/58% 62% 38% 42%;transform:scale(1.02)}70%{border-radius:52% 48% 48% 52%/62% 58% 42% 38%;transform:scale(0.99)}}
 @keyframes sq-idle-blob{0%{border-radius:62% 38% 72% 28%/34% 58% 42% 66%}25%{border-radius:42% 58% 52% 48%/68% 32% 68% 32%}50%{border-radius:72% 28% 42% 58%/52% 68% 32% 48%}75%{border-radius:38% 62% 68% 32%/46% 54% 46% 54%}100%{border-radius:62% 38% 72% 28%/34% 58% 42% 66%}}
 @keyframes sq-idle-star{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.04) rotate(8deg)}}
 @keyframes sq-idle-heart{0%,100%{transform:scale(1)}40%{transform:scale(1.05)}70%{transform:scale(.97)}}
@@ -655,29 +629,6 @@ body.dark .scale-step{background:rgba(255,255,255,.04)}
 @media(max-width:920px){.media-cards{grid-template-columns:1fr 1fr}}
 @media(max-width:580px){.media-cards{grid-template-columns:1fr}}
 
-/* ======== BOX VIEWER ======== */
-.box-viewer{margin-top:48px}
-.bv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
-.bv-item{background:var(--card);border:1.5px solid var(--hair);border-radius:18px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .22s;box-shadow:var(--shadow-sm)}
-.bv-item:hover{border-color:var(--pink);box-shadow:0 8px 28px rgba(236,45,139,.12);transform:translateY(-3px)}
-.bv-item .bv-ico{font-size:2rem;margin-bottom:8px;display:block}
-.bv-item .bv-name{font-size:.82rem;font-weight:700;color:var(--ink);line-height:1.3}
-.bv-item .bv-tag{font-size:.72rem;color:var(--muted);margin-top:4px}
-/* modal */
-.bv-modal{position:fixed;inset:0;z-index:7000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
-.bv-modal.open{opacity:1;pointer-events:all}
-.bv-modal-bg{position:absolute;inset:0;background:rgba(27,23,38,.55);backdrop-filter:blur(4px)}
-.bv-modal-box{position:relative;z-index:1;background:var(--card);border-radius:28px;padding:36px 32px;max-width:460px;width:100%;box-shadow:0 32px 80px rgba(27,23,38,.25);transform:scale(.93) translateY(16px);transition:transform .28s cubic-bezier(.2,.9,.3,1)}
-.bv-modal.open .bv-modal-box{transform:none}
-.bv-modal-ico{font-size:3.2rem;margin-bottom:12px;display:block}
-.bv-modal-title{font-family:"Unbounded",sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:10px}
-.bv-modal-desc{color:var(--muted);font-size:.95rem;line-height:1.65;margin-bottom:18px}
-.bv-modal-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px}
-.bv-modal-tags span{background:var(--pink-wash);color:var(--pink-ink);font-size:.75rem;font-weight:700;padding:5px 11px;border-radius:999px}
-.bv-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:var(--hair);color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
-.bv-close:hover{background:var(--ink);color:#fff}
-@media(max-width:920px){.bv-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.bv-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ======== FAQ ======== */
 .faq{margin-top:28px}
@@ -710,9 +661,6 @@ body.dark .faq-arr{background:#2a2240}
 /* ======== DARK: new sections ======== */
 body.dark .partner-chip{background:#18132a;border-color:#2a2240}
 body.dark .media-card{background:#18132a;border-color:#2a2240}
-body.dark .bv-item{background:#18132a;border-color:#2a2240}
-body.dark .bv-item:hover{border-color:var(--pink)}
-body.dark .bv-modal-box{background:#18132a}
 
 </style>
 </head>
@@ -761,8 +709,8 @@ body.dark .bv-modal-box{background:#18132a}
     <button class="sq-s-btn active" data-shape="ball">
       <div class="sq-s-preview sq-s-ball"></div>Шарик
     </button>
-    <button class="sq-s-btn" data-shape="cube">
-      <div class="sq-s-preview sq-s-cube"></div>Кубик
+    <button class="sq-s-btn" data-shape="egg">
+      <div class="sq-s-preview sq-s-egg"></div>Яйцо
     </button>
     <button class="sq-s-btn" data-shape="blob">
       <div class="sq-s-preview sq-s-blob"></div>Слизь
@@ -986,25 +934,6 @@ body.dark .bv-modal-box{background:#18132a}
       <p class="cite">По материалам исследований и практики применения сенсорных инструментов в образовательной среде.</p>
     </div>
 
-    <!-- BOX VIEWER -->
-    <div class="box-viewer reveal">
-      <span class="eyebrow">Что внутри</span>
-      <h3 style="font-size:1.35rem;font-weight:700;margin-top:6px">Нажмите на любой предмет — узнайте подробнее</h3>
-      <div class="bv-grid" id="bv-grid">
-        <div class="bv-item" data-id="0"><span class="bv-ico">🫧</span><span class="bv-name">Антистресс-сквиши</span><span class="bv-tag">Тактильный</span></div>
-        <div class="bv-item" data-id="1"><span class="bv-ico">🌀</span><span class="bv-name">Фиджет-спиннер</span><span class="bv-tag">Вестибулярный</span></div>
-        <div class="bv-item" data-id="2"><span class="bv-ico">💍</span><span class="bv-name">Тактильные кольца</span><span class="bv-tag">Тактильный</span></div>
-        <div class="bv-item" data-id="3"><span class="bv-ico">🪨</span><span class="bv-name">Сенсорные камни</span><span class="bv-tag">Тактильный</span></div>
-        <div class="bv-item" data-id="4"><span class="bv-ico">🎨</span><span class="bv-name">Кинетический песок</span><span class="bv-tag">Проприоцептивный</span></div>
-        <div class="bv-item" data-id="5"><span class="bv-ico">🐛</span><span class="bv-name">Попит / bubble wrap</span><span class="bv-tag">Тактильный</span></div>
-        <div class="bv-item" data-id="6"><span class="bv-ico">🫁</span><span class="bv-name">Карточки дыхания</span><span class="bv-tag">Регуляция</span></div>
-        <div class="bv-item" data-id="7"><span class="bv-ico">🔗</span><span class="bv-name">Цепочка-непоседа</span><span class="bv-tag">Моторный</span></div>
-        <div class="bv-item" data-id="8"><span class="bv-ico">🪩</span><span class="bv-name">Мяч-ёж</span><span class="bv-tag">Тактильный</span></div>
-        <div class="bv-item" data-id="9"><span class="bv-ico">🧊</span><span class="bv-name">Слайм / лизун</span><span class="bv-tag">Тактильный</span></div>
-        <div class="bv-item" data-id="10"><span class="bv-ico">📋</span><span class="bv-name">Инструкция педагога</span><span class="bv-tag">Методический</span></div>
-        <div class="bv-item" data-id="11"><span class="bv-ico">📦</span><span class="bv-name">+29 предметов</span><span class="bv-tag">Смотреть всё</span></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1180,73 +1109,9 @@ body.dark .bv-modal-box{background:#18132a}
       <article class="member reveal"><div class="av">АИ</div><h3>Анель Ибрашева</h3><div class="role">Волонтёр-исследователь · основатель</div><a href="tel:+77713417021">+7 771 341 70 21</a><a href="mailto:ibrashevaa2008@gmail.com">ibrashevaa2008@gmail.com</a></article>
       <article class="member reveal"><div class="av">ТБ</div><h3>Тасним Бултаева</h3><div class="role">Волонтёр-исследователь · основатель</div><a href="tel:+77085555010">+7 708 555 50 10</a><a href="mailto:tasnim.bultayevanis@gmail.com">tasnim.bultayevanis@gmail.com</a></article>
     </div>
-    <!-- ORDER FORM -->
-    <div class="order-form-wrap reveal" id="order-form-wrap">
-      <div id="order-form-inner">
-        <h3 style="font-size:1.4rem;font-weight:700;margin-bottom:6px">Заявка на бокс</h3>
-        <p style="color:var(--muted);font-size:.95rem;margin-bottom:28px">Заполните форму — мы свяжемся в течение 24 часов. Заявка придёт напрямую в наш Telegram.</p>
-        <form id="order-form" novalidate>
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="f-name">Ваше имя <span class="req">*</span></label>
-              <input class="form-input" id="f-name" name="name" type="text" placeholder="Имя и фамилия" required>
-            </div>
-            <div class="form-group">
-              <label for="f-type">Тип организации <span class="req">*</span></label>
-              <select class="form-input" id="f-type" name="type" required>
-                <option value="" disabled selected>Выберите...</option>
-                <option value="Государственная школа">Государственная школа</option>
-                <option value="Частная школа">Частная школа</option>
-                <option value="Экстренная служба (МЧС / пожарные / полиция)">Экстренная служба (МЧС / пожарные / полиция)</option>
-                <option value="Семья ребёнка с ООП">Семья ребёнка с ООП</option>
-                <option value="Другое">Другое</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="f-org">Название организации</label>
-              <input class="form-input" id="f-org" name="org" type="text" placeholder="Школа №..., ДГПБ...">
-            </div>
-            <div class="form-group">
-              <label for="f-qty">Количество боксов <span class="req">*</span></label>
-              <input class="form-input" id="f-qty" name="qty" type="number" min="1" max="500" placeholder="Например: 7" required>
-            </div>
-            <div class="form-group">
-              <label for="f-phone">Телефон / WhatsApp <span class="req">*</span></label>
-              <input class="form-input" id="f-phone" name="phone" type="tel" placeholder="+7 700 000 00 00" required>
-            </div>
-            <div class="form-group">
-              <label for="f-email">Email</label>
-              <input class="form-input" id="f-email" name="email" type="email" placeholder="you@school.kz">
-            </div>
-            <div class="form-group full">
-              <label for="f-msg">Комментарий</label>
-              <textarea class="form-input" id="f-msg" name="msg" placeholder="Расскажите о вашей ситуации, задайте вопрос..."></textarea>
-            </div>
-          </div>
-          <div class="form-footer">
-            <span class="form-note">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-              Данные защищены — отправляется только в Telegram команды
-            </span>
-            <button class="form-submit-btn" type="submit" id="form-submit-btn">
-              <span class="btn-text">Отправить заявку →</span>
-              <span class="spin"></span>
-            </button>
-          </div>
-          <div class="form-error-msg" id="form-error-msg"></div>
-        </form>
-      </div>
-      <div class="form-success-box" id="form-success-box">
-        <div class="ok-ring">
-          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-        </div>
-        <h3>Заявка отправлена!</h3>
-        <p>Мы получили вашу заявку и свяжемся с вами в течение 24 часов. Также можете написать напрямую: <b>sensoryrs@outlook.com</b></p>
-      </div>
-    </div>
-
-    <div class="cont-foot reveal" style="margin-top:28px">
-      <p>Партнёрство и сотрудничество: <span class="pk">sensoryrs@outlook.com</span></p>
+    <div class="cont-foot reveal" style="margin-top:36px;text-align:center">
+      <a class="btn btn-primary" href="zakaz.html" style="font-size:1rem;padding:14px 32px">Заполнить заявку на бокс →</a>
+      <p style="margin-top:14px;font-size:.88rem;color:var(--muted)">Свяжемся в течение 24 часов · <span class="pk">sensoryrs@outlook.com</span></p>
     </div>
   </div>
 </section>
@@ -1443,74 +1308,6 @@ if(boxwrap){
   setTimeout(dismissIntro, 2480);
 })();
 
-/* ======== ORDER FORM → TELEGRAM ======== */
-(function(){
-  const form    = document.getElementById('order-form');
-  const btn     = document.getElementById('form-submit-btn');
-  const errEl   = document.getElementById('form-error-msg');
-  const successEl = document.getElementById('form-success-box');
-  const innerEl  = document.getElementById('order-form-inner');
-  if (!form) return;
-
-  const TG_TOKEN   = '8256696953:AAH9r1gRSiNKwL-p6kNJIWKZ1y2rUtIDMNQ';
-  const TG_CHAT_ID = '926811016';
-
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    errEl.classList.remove('show');
-
-    const name  = form.querySelector('#f-name').value.trim();
-    const type  = form.querySelector('#f-type').value;
-    const org   = form.querySelector('#f-org').value.trim();
-    const qty   = form.querySelector('#f-qty').value.trim();
-    const phone = form.querySelector('#f-phone').value.trim();
-    const email = form.querySelector('#f-email').value.trim();
-    const msg   = form.querySelector('#f-msg').value.trim();
-
-    if (!name || !type || !qty || !phone) {
-      errEl.textContent = 'Пожалуйста, заполните обязательные поля (*)';
-      errEl.classList.add('show');
-      return;
-    }
-
-    const text = [
-      '📦 <b>Новая заявка — Sensory Kit</b>',
-      '',
-      `👤 <b>Имя:</b> ${name}`,
-      `🏢 <b>Тип:</b> ${type}`,
-      org   ? `🏫 <b>Организация:</b> ${org}` : null,
-      `📦 <b>Кол-во боксов:</b> ${qty}`,
-      `📱 <b>Телефон:</b> ${phone}`,
-      email ? `✉️ <b>Email:</b> ${email}` : null,
-      msg   ? `💬 <b>Комментарий:</b> ${msg}` : null,
-      '',
-      '🌐 Отправлено с sensory-kit сайта'
-    ].filter(l => l !== null).join('\n');
-
-    btn.disabled = true;
-    btn.classList.add('loading');
-
-    try {
-      const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'HTML' })
-      });
-      const data = await res.json();
-      if (data.ok) {
-        innerEl.style.display = 'none';
-        successEl.classList.add('show');
-      } else {
-        throw new Error(data.description || 'Ошибка отправки');
-      }
-    } catch(err) {
-      errEl.textContent = 'Не удалось отправить. Напишите нам напрямую: sensoryrs@outlook.com';
-      errEl.classList.add('show');
-      btn.disabled = false;
-      btn.classList.remove('loading');
-    }
-  });
-})();
 
 /* ======== DARK THEME TOGGLE ======== */
 (function(){
@@ -1781,12 +1578,12 @@ if(boxwrap){
       grad: m => `radial-gradient(circle at 36% 30%,${m.ballFrom} 0%,${m.ballMid} 38%,${m.ballTo} 100%)`,
       squishBR: t => `${48+t*10}% ${52-t*10}% ${48+t*10}% ${52-t*10}%/${52-t*8}% ${48+t*8}% ${52-t*8}% ${48+t*8}%`,
     },
-    cube: {
-      idle:'sq-idle-cube 4s ease-in-out infinite', br:'16%',
-      clip:null, size:180,
-      grad: () => 'radial-gradient(circle at 36% 30%,#a8dcff 0%,#1FA9E6 42%,#003d6b 100%)',
-      glow:'rgba(31,169,230,.6)', ring:'rgba(31,169,230,.25)',
-      squishBR: t => `${16+t*12}% ${16-t*4}% ${16+t*12}% ${16-t*4}%`,
+    egg: {
+      idle:'sq-idle-egg 4s ease-in-out infinite', br:'50% 50% 50% 50%/60% 60% 40% 40%',
+      clip:null, size:185,
+      grad: () => 'radial-gradient(circle at 36% 30%,#a8f0c0 0%,#7DBE3A 42%,#2d5a10 100%)',
+      glow:'rgba(125,190,58,.6)', ring:'rgba(125,190,58,.25)',
+      squishBR: t => `${50+t*4}% ${50-t*4}% ${50+t*4}% ${50-t*4}%/${60-t*8}% ${60-t*8}% ${40+t*8}% ${40+t*8}%`,
     },
     blob: {
       idle:'sq-idle-blob 6s ease-in-out infinite', br:'62% 38% 72% 28%/34% 58% 42% 66%',
@@ -1941,13 +1738,13 @@ if(boxwrap){
 
     const TIPS = {
       ball:  'Сжимай ритмично — снижает тревогу и напряжение',
-      cube:  'Верти грани куба — каждая сторона разная на ощупь',
+      egg:   'Сожми яйцо ладонью — ощути как оно упруго возвращается',
       blob:  'Тяни и мни слизь — расслабляет мышечное напряжение',
       star:  'Сжимай кончики звезды — сенсорная стимуляция',
       heart: 'Держи в ладони — успокаивает сердечный ритм',
     };
     const COLORS = {
-      ball:'#EC2D8B', cube:'#1FA9E6', blob:'#8A6CFF', star:'#FFCE00', heart:'#e63946',
+      ball:'#EC2D8B', egg:'#7DBE3A', blob:'#8A6CFF', star:'#FFCE00', heart:'#e63946',
     };
 
     let angle = 0, velocity = 3, raf = null;
@@ -2038,50 +1835,6 @@ if(boxwrap){
   });
 })();
 
-/* ---- Box viewer modal ---- */
-(function(){
-  var ITEMS = [
-    {ico:'🫧',name:'Антистресс-сквиши',desc:'Мягкие фигурки из медленно восстанавливающейся пены. Сжатие активирует проприоцептивные рецепторы и снижает уровень кортизола. Работает при тревоге, гиперактивности, панических состояниях.',tags:['Тактильный','Снятие стресса','СДВГ', 'РАС']},
-    {ico:'🌀',name:'Фиджет-спиннер',desc:'Вращение даёт вестибулярную и проприоцептивную стимуляцию. Помогает сосредоточиться, «занять руки» без отвлечения других. Популярен при СДВГ и сенсорных потребностях.',tags:['Вестибулярный','Фокус','СДВГ']},
-    {ico:'💍',name:'Тактильные кольца',desc:'Рифлёные резиновые кольца надеваются на палец. Массаж кончиков пальцев активирует парасимпатическую нервную систему. Можно использовать незаметно прямо на уроке.',tags:['Тактильный','Дискретный','Урок']},
-    {ico:'🪨',name:'Сенсорные камни',desc:'Отполированные камни разной текстуры и температуры. Переключают внимание через тактильный канал, снижают тревогу. Эффективны при сенсорной перегрузке.',tags:['Тактильный','Тревога','Перегрузка']},
-    {ico:'🎨',name:'Кинетический песок',desc:'Песок с добавлением силикона — лепится, но не липнет. Глубокая проприоцептивная стимуляция через давление на ладони. Отлично подходит для сенсорных пауз.',tags:['Проприоцептивный','Пауза','Успокоение']},
-    {ico:'🐛',name:'Попит / bubble wrap',desc:'Нажатие пузырьков даёт предсказуемую тактильную обратную связь. Стереотипия снижает стресс и помогает ребёнку «заземлиться».',tags:['Тактильный','РАС','Стереотипия']},
-    {ico:'🫁',name:'Карточки дыхания',desc:'Ламинированные карточки с визуальными инструкциями дыхательных техник: «4-7-8», «квадратное дыхание», «шарик». Работают без слов — понятны ребёнку в состоянии аффекта.',tags:['Регуляция','Дыхание','Кризис']},
-    {ico:'🔗',name:'Цепочка-непоседа',desc:'Металлическая цепочка с фиджет-элементами для перебирания в руках. Мелкая моторика и ритмичное движение успокаивают нервную систему.',tags:['Моторный','Ритм','Дискретный']},
-    {ico:'🪩',name:'Мяч-ёж',desc:'Резиновый мяч с шипами для мощного тактильного давления. Сжатие и прокатка по ладони дают глубокую проприоцепцию — «якорь» для нервной системы.',tags:['Тактильный','Давление','Тревога']},
-    {ico:'🧊',name:'Слайм / лизун',desc:'Вязкая масса для разминания и растягивания. Медленное, предсказуемое движение снижает тревогу. Помогает при сенсорном поиске.',tags:['Тактильный','Сенсорный поиск','Успокоение']},
-    {ico:'📋',name:'Инструкция педагога',desc:'Методичка на 8 страниц: как распознать сенсорную перегрузку, алгоритм работы с каждым предметом, советы для работы с нейроразнообразными детьми.',tags:['Методический','Педагог','Обучение']},
-    {ico:'📦',name:'Ещё 29 предметов',desc:'В боксе ~40 предметов итого. Полный список адаптируется под запрос организации. Напишите нам — составим комплект под конкретные нужды вашего класса или службы.',tags:['Индивидуально','Комплект','Заказ']},
-  ];
-
-  var modal = document.getElementById('bv-modal');
-  var mIco = document.getElementById('bvm-ico');
-  var mTitle = document.getElementById('bvm-title');
-  var mDesc = document.getElementById('bvm-desc');
-  var mTags = document.getElementById('bvm-tags');
-
-  document.querySelectorAll('.bv-item').forEach(function(el){
-    el.addEventListener('click', function(){
-      var id = parseInt(el.dataset.id);
-      var d = ITEMS[id];
-      mIco.textContent = d.ico;
-      mTitle.textContent = d.name;
-      mDesc.textContent = d.desc;
-      mTags.innerHTML = d.tags.map(function(t){return '<span>'+t+'</span>';}).join('');
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  function closeModal(){
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.getElementById('bvm-close').addEventListener('click', closeModal);
-  document.getElementById('bvm-bg').addEventListener('click', closeModal);
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
-})();
 
 /* ---- Lazy load images ---- */
 document.querySelectorAll('img[data-src]').forEach(function(img){
@@ -2102,18 +1855,6 @@ if('serviceWorker' in navigator){
 
 </script>
 
-<!-- Box viewer modal -->
-<div class="bv-modal" id="bv-modal" role="dialog" aria-modal="true">
-  <div class="bv-modal-bg" id="bvm-bg"></div>
-  <div class="bv-modal-box">
-    <button class="bv-close" id="bvm-close" aria-label="Закрыть">✕</button>
-    <span class="bv-modal-ico" id="bvm-ico"></span>
-    <div class="bv-modal-title" id="bvm-title"></div>
-    <p class="bv-modal-desc" id="bvm-desc"></p>
-    <div class="bv-modal-tags" id="bvm-tags"></div>
-    <a class="btn btn-primary" href="zakaz.html" style="width:100%;text-align:center;display:block">Заказать бокс →</a>
-  </div>
-</div>
 
 </body>
 </html>
